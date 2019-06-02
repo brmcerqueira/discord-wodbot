@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="brmcerqueira.discord-cofbot.main" target="11" />
       <module name="brmcerqueira.discord-cofbot.test" target="11" />
+      <module name="discord-codbot.main" target="11" />
+      <module name="discord-codbot.test" target="11" />
       <module name="discord-cofbot.main" target="11" />
       <module name="discord-cofbot.test" target="11" />
       <module name="discord-cofbot_main" target="11" />

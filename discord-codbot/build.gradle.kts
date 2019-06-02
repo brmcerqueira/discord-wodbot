@@ -16,7 +16,6 @@ dependencies {
     implementation("com.discord4j:discord4j-core:3.0.6")
 }
 
-
 application {
     mainClassName = "com.brmcerqueira.discord.codbot.Main"
 }

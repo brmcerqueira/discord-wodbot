@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="discord-codbot:test" external.linked.project.path="$MODULE_DIR$/../../discord-codbot" external.root.project.path="$MODULE_DIR$/../../discord-codbot" external.system.id="GRADLE" external.system.module.group="brmcerqueira" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
+        <compilerSettings />
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/../../discord-codbot/build/classes/kotlin/test" />
+          <option name="classpath" value="$MODULE_DIR$/../../discord-codbot/build/classes/kotlin/main:/home/bruno/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.21/d0634d54452abc421db494ad32dd215e6591c49f/kotlin-stdlib-jdk8-1.3.21.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/discord4j-core/3.0.6/65ddba3d694de4ed0ada38435d560bddaff0c352/discord4j-core-3.0.6.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.21/d207ce2c9bcf17dc8e51bab4dbfdac4d013e7138/kotlin-stdlib-jdk7-1.3.21.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.21/4bcc2012b84840e19e1e28074284cac908be0295/kotlin-stdlib-1.3.21.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/discord4j-rest/3.0.6/550b2d80f03a1324f12ab644d8326f7581291b02/discord4j-rest-3.0.6.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/discord4j-gateway/3.0.6/92ad7fc6586d8e8805962c638e945e2641e31413/discord4j-gateway-3.0.6.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/discord4j-voice/3.0.6/d1931dc97e025a0c95c6d798d5f5055896ab671/discord4j-voice-3.0.6.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/stores-jdk/3.0.5/b4477e4216c3100a698058f1d39a71f6d94f534c/stores-jdk-3.0.5.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.21/f30e4a9897913e53d778f564110bafa1fef46643/kotlin-stdlib-common-1.3.21.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/discord4j-common/3.0.6/97bab04810eecb1318f95956d6b9d51fde702bb1/discord4j-common-3.0.6.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.projectreactor.addons/reactor-extra/3.2.3.RELEASE/88fdf0c35d2632f381ceee2e2ddbc928da9ed1d2/reactor-extra-3.2.3.RELEASE.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/simple-fsm/1.0.1/58cc3d3c4d25823eecb174a8e4807ba83299f36a/simple-fsm-1.0.1.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.discord4j/stores-api/3.0.5/16375155af235b3109cdd25a1ab1606b382c090d/stores-api-3.0.5.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.projectreactor.netty/reactor-netty/0.8.8.RELEASE/4343cf2fe902bb35e5bc6784024e3e254c8af8c1/reactor-netty-0.8.8.RELEASE.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.9.9/4b04126963103216c9c43b0f34bbc36315654204/jackson-datatype-jdk8-2.9.9.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.9.9/d6eb9817d9c7289a91f043ac5ee02a6b3cc86238/jackson-databind-2.9.9.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.2.9.RELEASE/a4c759ef932c530eaaad73e2544739bee9530903/reactor-core-3.2.9.RELEASE.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.austinv11.servicer/Servicer/1.0.0/55e6948826f95144c65f8b8570f6ca1b64df766a/Servicer-1.0.0.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http2/4.1.36.Final/ed198d8a5283910b0c062a50dd28ef4688dcb2a5/netty-codec-http2-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler-proxy/4.1.36.Final/f313f45db4417cd8a87c49b8cb01faf19f6abdec/netty-handler-proxy-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.36.Final/62b73d439dbddf3c0dde092b048580139695ab46/netty-codec-http-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.36.Final/1c38a5920a10c01b1cce4cdc964447ec76abf1b5/netty-handler-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.36.Final/8ec8e248ef34b86cc7fae023fb40b9ffa8f5614f/netty-transport-native-epoll-4.1.36.Final-linux-x86_64.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.9.0/7c10d545325e3a6e72e06381afe469fd40eb701/jackson-annotations-2.9.0.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.9.9/bfff5af9fb8347d26bbb7959cb9b4fe9a2b0ca5e/jackson-core-2.9.9.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.2/323964c36556eb0e6209f65c1cef72b53b461ab8/reactive-streams-1.0.2.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-socks/4.1.36.Final/54bedfd0bec809898d5b8ff9cb9f3f9e427e967/netty-codec-socks-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.36.Final/8462116d327bb3d1ec24258071f2e7345a73dbfc/netty-codec-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.36.Final/d95d7033f400f9472db9da7834c443b96cd4bab0/netty-transport-native-unix-common-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.36.Final/8546e6be47be587acab86bbd106ca023678f07d9/netty-transport-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.36.Final/7f2db0921dd57df4db076229830ab09bba713aeb/netty-buffer-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.36.Final/e4d243fbf4e6837fa294f892bf97149e18129100/netty-resolver-4.1.36.Final.jar:/home/bruno/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.36.Final/f6f38fde652a70ea579897edc80e52353e487ae6/netty-common-4.1.36.Final.jar" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="discord-codbot" />
+          <option name="addCompilerBuiltIns" value="true" />
+          <option name="loadBuiltInsFromDependencies" value="true" />
+          <option name="friendPaths">
+            <array>
+              <option value="$MODULE_DIR$/../../discord-codbot/build/classes/java/main" />
+              <option value="$MODULE_DIR$/../../discord-codbot/build/classes/kotlin/main" />
+            </array>
+          </option>
+          <option name="languageVersion" value="1.3" />
+          <option name="apiVersion" value="1.3" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+          <option name="pluginClasspaths">
+            <array />
+          </option>
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+    <output-test url="file://$MODULE_DIR$/../../discord-codbot/out/test/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../discord-codbot/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../discord-codbot/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../discord-codbot/src/test/kotlin" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../discord-codbot/src/test/resources" type="java-test-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="discord-codbot.main" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.21" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:discord4j-core:3.0.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.21" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.3.21" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:discord4j-rest:3.0.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:discord4j-gateway:3.0.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:discord4j-voice:3.0.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:stores-jdk:3.0.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.21" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:discord4j-common:3.0.6" level="project" />
+    <orderEntry type="library" name="Gradle: io.projectreactor.addons:reactor-extra:3.2.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:simple-fsm:1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.discord4j:stores-api:3.0.5" level="project" />
+    <orderEntry type="library" name="Gradle: io.projectreactor.netty:reactor-netty:0.8.8.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.9" level="project" />
+    <orderEntry type="library" name="Gradle: io.projectreactor:reactor-core:3.2.9.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: com.austinv11.servicer:Servicer:1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-codec-http2:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-handler-proxy:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-codec-http:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-handler:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-codec-socks:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-codec:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-transport:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-buffer:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-resolver:4.1.36.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty-common:4.1.36.Final" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="discord-codbot.main" />
+</module>
