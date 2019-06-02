@@ -1,4 +1,4 @@
-package com.brmcerqueira.discord.cofbot
+package com.brmcerqueira.discord.codbot
 
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent

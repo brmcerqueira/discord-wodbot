@@ -1,1 +1,1 @@
-# discord-cofbot
+# discord-codbot

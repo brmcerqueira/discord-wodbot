@@ -18,5 +18,5 @@ dependencies {
 
 
 application {
-    mainClassName = "com.brmcerqueira.discord.cofbot.Main"
+    mainClassName = "com.brmcerqueira.discord.codbot.Main"
 }
