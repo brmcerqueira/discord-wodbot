@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.discord4j:stores-api:3.0.5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.discord4j/stores-api/3.0.5/16375155af235b3109cdd25a1ab1606b382c090d/stores-api-3.0.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.discord4j/stores-api/3.0.5/e29586504d9af0a37d200d11f30a71002b1569a1/stores-api-3.0.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
