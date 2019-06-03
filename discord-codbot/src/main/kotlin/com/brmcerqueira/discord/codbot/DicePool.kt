@@ -2,7 +2,7 @@ package com.brmcerqueira.discord.codbot
 
 import kotlin.random.Random
 
-class DicePool(private var amount: Int, private var explosion: Int = 11, isCanceller: Boolean = false) {
+class DicePool(private var amount: Int, private var explosion: Int, isCanceller: Boolean) {
 
     var successes: Int = 0
         private set
@@ -12,7 +12,7 @@ class DicePool(private var amount: Int, private var explosion: Int = 11, isCance
         private set
 
     init {
-        if (explosion > 11) {
+        if (explosion > 11 || explosion == 0) {
             explosion = 11
         }
         else if (explosion < 8){
@@ -49,5 +49,5 @@ class DicePool(private var amount: Int, private var explosion: Int = 11, isCance
         dices.sortDescending()
     }
 
-    private fun randomDice() = Random.nextInt(1,10)
+    private fun randomDice() = Random.nextInt(1,11)
 }
