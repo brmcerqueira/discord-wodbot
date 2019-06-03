@@ -7,7 +7,8 @@ class DicePool(private var amount: Int, private var explosion: Int, isCanceller:
     var successes: Int = 0
         private set
 
-    val dices = ArrayList<Int>()
+    val successDices = ArrayList<Int>()
+    val failureDices = ArrayList<Int>()
     var isCriticalFailure: Boolean = false
         private set
 
@@ -25,28 +26,35 @@ class DicePool(private var amount: Int, private var explosion: Int, isCanceller:
             if(dice == 10) {
                 successes++
                 amount++
+                successDices.add(dice)
             }
-            else if(dice == 1) {
-                isCriticalFailure = true
+            else {
+                if(dice == 1) {
+                    isCriticalFailure = true
+                }
+                failureDices.add(dice)
             }
-            dices.add(dice)
         }
 
-        for (x in 0..amount) {
+        for (x in 0 until amount) {
             val dice = randomDice()
             if(dice >= 8) {
                 successes++
                 if(dice >= explosion) {
                     amount++
                 }
+                successDices.add(dice)
             }
-            else if(isCanceller && dice == 1) {
-                successes--
+            else {
+                if(isCanceller && dice == 1) {
+                    successes--
+                }
+                failureDices.add(dice)
             }
-            dices.add(dice)
         }
 
-        dices.sortDescending()
+        successDices.sortDescending()
+        failureDices.sortDescending()
     }
 
     private fun randomDice() = Random.nextInt(1,11)

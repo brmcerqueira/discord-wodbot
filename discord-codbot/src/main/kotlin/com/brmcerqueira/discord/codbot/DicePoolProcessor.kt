@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux
 class DicePoolProcessor : IProcessor {
 
     companion object {
-        private val regex = "^%(?<isCanceller>!)?(?<dices>[1-99].)\\s*(\\*(?<explosion>0|8|9))?.*\$".toRegex()
+        private val regex = "^%(?<isCanceller>!)?(?<dices>[1-9]?\\d)\\s*(\\*(?<explosion>0|8|9))?.*\$".toRegex()
     }
 
     override fun match(event: MessageCreateEvent): Boolean {
@@ -20,15 +20,31 @@ class DicePoolProcessor : IProcessor {
             .flatMap(Message::getChannel)
             .flatMap { channel ->
                 val dicePool =  DicePool(
-                        matchResult.groups["dices"]!!.value.toInt(),
-                        if (matchResult.groups["explosion"] != null)
-                            matchResult.groups["explosion"]!!.value.toInt()
-                        else 10,
-                        matchResult.groups["isCanceller"] != null
+                    matchResult.groups["dices"]!!.value.toInt(),
+                    if (matchResult.groups["explosion"] != null)
+                        matchResult.groups["explosion"]!!.value.toInt()
+                    else 10,
+                    matchResult.groups["isCanceller"] != null
                 )
 
-                channel.createMessage("```md\n [${dicePool.dices.joinToString(", ")}](${dicePool.successes})\n < ${dicePool.isCriticalFailure} >```")
+                val stringBuffer = StringBuffer()
+
+                stringBuffer.appendln("```md")
+
+                stringBuffer.appendln("[${dicePool.successDices.format()}](${dicePool.failureDices.format()})")
+
+                stringBuffer.appendln("# ${dicePool.successes}")
+
+                if (dicePool.isCriticalFailure) {
+                    stringBuffer.appendln("/* Critical Failure *")
+                }
+
+                stringBuffer.append("```")
+
+                channel.createMessage(stringBuffer.toString())
             }
             .map { Unit }
     }
+
+    private fun ArrayList<Int>.format(): String =  if (this.isEmpty()) "-" else this.joinToString(" - ")
 }
