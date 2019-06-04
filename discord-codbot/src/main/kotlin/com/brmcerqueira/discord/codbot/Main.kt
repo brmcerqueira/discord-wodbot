@@ -15,7 +15,8 @@ class Main {
                     .subscribe { ready -> println("Logged in as " + ready.self.username) }
 
             client.eventDispatcher.on(MessageCreateEvent::class.java)
-                    .register(DicePoolProcessor())
+                    .register(InitiativeProcessor(),
+                            DicePoolProcessor())
                     .subscribe()
 
             client.login().block()

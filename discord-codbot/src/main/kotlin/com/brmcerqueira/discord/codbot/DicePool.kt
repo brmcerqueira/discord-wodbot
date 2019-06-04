@@ -1,7 +1,5 @@
 package com.brmcerqueira.discord.codbot
 
-import kotlin.random.Random
-
 class DicePool(private var amount: Int, private var explosion: Int, isCanceller: Boolean) {
 
     var successes: Int = 0
@@ -56,6 +54,4 @@ class DicePool(private var amount: Int, private var explosion: Int, isCanceller:
         successDices.sortDescending()
         failureDices.sortDescending()
     }
-
-    private fun randomDice() = Random.nextInt(1,11)
 }
