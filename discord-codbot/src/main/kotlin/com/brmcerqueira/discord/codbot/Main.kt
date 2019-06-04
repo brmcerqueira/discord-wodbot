@@ -12,7 +12,7 @@ class Main {
             val client = DiscordClientBuilder(args.first()).build()
 
             client.eventDispatcher.on(ReadyEvent::class.java)
-                    .subscribe { ready -> println("Logged in as " + ready.self.username) }
+                    .subscribe { ready -> println("Entrou como ${ready.self.username}.") }
 
             client.eventDispatcher.on(MessageCreateEvent::class.java)
                     .register(InitiativeProcessor(),
