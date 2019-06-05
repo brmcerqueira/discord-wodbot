@@ -25,10 +25,10 @@ abstract class ReplyProcessor : IProcessor {
 
                 val stringBuffer = StringBuffer()
 
-                stringBuffer.append(event.member.get().mention)
+                stringBuffer.append(if (event.member.isPresent) event.member.get().mention else "**Você**")
 
                 if (description.isNotEmpty()) {
-                    stringBuffer.appendln(" __***$description***__")
+                    stringBuffer.appendln(" __*$description*__")
                 }
                 else {
                     stringBuffer.appendln()
