@@ -1,0 +1,20 @@
+FROM gradle:5.4.1-jdk11
+
+WORKDIR ..
+
+ARG PROJECT_HOME=/discord-codbot
+ARG PROJECT_TOKEN=""
+ENV PROJECT_TOKEN=${PROJECT_TOKEN}
+
+COPY . .$PROJECT_HOME
+
+WORKDIR /home/$PROJECT_HOME
+
+USER root
+RUN chown -R gradle .
+USER gradle
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c"]
+CMD ["gradle run --args=$PROJECT_TOKEN"]
