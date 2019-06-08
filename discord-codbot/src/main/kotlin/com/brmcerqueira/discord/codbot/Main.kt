@@ -14,7 +14,9 @@ import reactor.core.publisher.Flux
 import kotlin.random.Random
 
 fun main(args: Array<String>) {
-    val port = System.getenv("PORT")
+    val port = System.getenv("PORT")?.toInt() ?: 4100
+
+    println("Porta: $port")
 
     val client = DiscordClientBuilder(args.first()).build()
 
@@ -26,18 +28,16 @@ fun main(args: Array<String>) {
                     DicePoolProcessor())
             .subscribe()
 
-    client.login().block()
+    client.login().subscribe()
 
-    val server = embeddedServer(Netty, port = port?.toInt() ?: 8080) {
+    val server = embeddedServer(Netty, port = port) {
         routing {
             get("/") {
-                call.respondText("Hello World!", ContentType.Text.Plain)
-            }
-            get("/demo") {
-                call.respondText("HELLO WORLD!")
+                call.respondText("Hello, world!", ContentType.Text.Html)
             }
         }
     }
+
     server.start(wait = true)
 }
 

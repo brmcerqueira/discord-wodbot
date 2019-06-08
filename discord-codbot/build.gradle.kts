@@ -12,14 +12,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "4.0.3"
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.31")
-    }
-}
 
 repositories {
     mavenCentral()
