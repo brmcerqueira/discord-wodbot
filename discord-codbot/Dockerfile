@@ -14,6 +14,8 @@ USER root
 RUN chown -R gradle .
 USER gradle
 
+RUN gradle classes
+
 EXPOSE 8080
 
 ENTRYPOINT ["sh", "-c"]
