@@ -6,6 +6,7 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.MessageChannel
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
@@ -24,7 +25,7 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
-import org.slf4j.LoggerFactory
+import io.ktor.util.pipeline.PipelineContext
 import java.math.BigInteger
 import kotlin.collections.HashMap
 
@@ -52,24 +53,30 @@ fun main(args: Array<String>) {
             get("/") {
                 call.respondText("Codbot!", ContentType.Text.Html)
             }
-            post("/roll/dices") {
-                val dto = call.receive<DicePoolModel>()
-
-                val authorization = call.request.authorization()?.toBigIntegerOrNull()
-                if (authorization != null && usersHashMap.containsKey(authorization)) {
-                    val pair = usersHashMap[authorization]!!
-                    val botMessage = DicePoolBotMessage()
-
-                    botMessage.send(pair.first, DicePoolDto(dto.amount, dto.explosion, dto.isCanceller), pair.second, dto.description).subscribe()
-                    call.respond(HttpStatusCode.OK)
-                }
-
-                call.respond(HttpStatusCode.Unauthorized)
-            }
+            post("/roll/dices", treatRequest<DicePoolModel> { dto, pair ->
+                DicePoolBotMessage().send(pair.first, DicePoolDto(dto.amount, dto.explosion, dto.isCanceller), pair.second, dto.description).subscribe()
+            })
+            post("/roll/initiative", treatRequest<InitiativeModel> { dto, pair ->
+                InitiativeBotMessage().send(pair.first, dto.amount, pair.second, dto.description).subscribe()
+            })
         }
     }
 
     server.start(wait = true)
+}
+
+@KtorExperimentalAPI
+private inline fun <reified T : Any> treatRequest(crossinline action: (T, Pair<MessageChannel, Member?>) -> Unit):
+        suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
+    return {
+        val authorization = call.request.authorization()?.toBigIntegerOrNull()
+        if (authorization != null && usersHashMap.containsKey(authorization)) {
+            action(call.receive(), usersHashMap[authorization]!!)
+            call.respond(HttpStatusCode.OK)
+        }
+
+        call.respond(HttpStatusCode.Unauthorized)
+    }
 }
 
 private fun Flux<MessageCreateEvent>.register(vararg processors: IProcessor): Flux<Unit> {
