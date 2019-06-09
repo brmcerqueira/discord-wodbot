@@ -24,19 +24,15 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
+import org.slf4j.LoggerFactory
 import java.math.BigInteger
 import kotlin.collections.HashMap
 
 @KtorExperimentalAPI
 fun main(args: Array<String>) {
-    val port = System.getenv("PORT")?.toInt() ?: 4100
-
-    println("Porta: $port")
-
     val client = DiscordClientBuilder(args.first()).build()
 
-    client.eventDispatcher.on(ReadyEvent::class.java)
-            .subscribe { ready -> println("Entrou como ${ready.self.username}.") }
+    client.eventDispatcher.on(ReadyEvent::class.java).subscribe()
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
@@ -46,7 +42,7 @@ fun main(args: Array<String>) {
 
     client.login().subscribe()
 
-    val server = embeddedServer(Netty, port = port) {
+    val server = embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 4100) {
         install(ContentNegotiation) {
             jackson {
                 enable(SerializationFeature.INDENT_OUTPUT)

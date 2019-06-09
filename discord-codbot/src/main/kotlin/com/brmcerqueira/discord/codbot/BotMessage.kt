@@ -22,9 +22,6 @@ abstract class BotMessage<T> {
 
         buildMessage(dto, stringBuffer)
 
-        return channel.createMessage(stringBuffer.toString()).map {
-            println("Respondeu '$stringBuffer'")
-            Unit
-        }
+        return channel.createMessage(stringBuffer.toString()).map { Unit }
     }
 }

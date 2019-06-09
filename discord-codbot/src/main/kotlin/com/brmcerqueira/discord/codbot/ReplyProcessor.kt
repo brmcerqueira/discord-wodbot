@@ -18,9 +18,7 @@ abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>) : IProce
     }
 
     override fun go(event: MessageCreateEvent): Flux<Unit> {
-        val content = event.message.content.get()
-        println("Chegou '$content'")
-        val matchResult = regex.matchEntire(content)!!
+        val matchResult = regex.matchEntire(event.message.content.get())!!
         return Flux.just(event.message)
                 .flatMap { it.channel }
                 .flatMap {
