@@ -1,6 +1,6 @@
 package com.brmcerqueira.discord.codbot
 
-class DicePool(private var amount: Int, private var explosion: Int, isCanceller: Boolean) {
+class DicePool(private val dicePoolDto: DicePoolDto) {
 
     var successes: Int = 0
         private set
@@ -11,12 +11,11 @@ class DicePool(private var amount: Int, private var explosion: Int, isCanceller:
         private set
 
     init {
-        if (explosion > 11 || explosion == 0) {
-            explosion = 11
-        }
-        else if (explosion < 8){
-            explosion = 8
-        }
+        val explosion =  if (dicePoolDto.explosion > 11 || dicePoolDto.explosion == 0) 11
+        else if (dicePoolDto.explosion < 8) 8
+        else dicePoolDto.explosion
+
+        var amount = dicePoolDto.amount
 
         if (amount <= 0) {
             amount = 0
@@ -44,7 +43,7 @@ class DicePool(private var amount: Int, private var explosion: Int, isCanceller:
                 successDices.add(dice)
             }
             else {
-                if(isCanceller && dice == 1) {
+                if(dicePoolDto.isCanceller && dice == 1) {
                     successes--
                 }
                 failureDices.add(dice)

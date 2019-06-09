@@ -13,3 +13,5 @@
 ``docker push registry.heroku.com/discord-codbot/latest``
 
 ``heroku container:push web --arg PROJECT_TOKEN=<VALUE>``
+
+``\@<Username>#Discriminator``

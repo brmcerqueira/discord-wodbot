@@ -1,42 +1,34 @@
 package com.brmcerqueira.discord.codbot
 
-import discord4j.core.`object`.entity.Message
+import discord4j.core.`object`.entity.Member
+import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.event.domain.message.MessageCreateEvent
 import reactor.core.publisher.Flux
 
-abstract class ReplyProcessor : IProcessor {
+abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>) : IProcessor {
 
     private val regex = getRegex()
 
     protected abstract fun getRegex(): Regex
 
-    protected abstract fun buildMessage(matchResult: MatchResult, stringBuffer: StringBuffer)
+    protected abstract fun extractDto(matchResult: MatchResult, channel: MessageChannel, member: Member?): T
 
     override fun match(event: MessageCreateEvent): Boolean {
         return event.message.content.map { regex.matches(it) }.orElse(false)
     }
 
     override fun go(event: MessageCreateEvent): Flux<Unit> {
-        val matchResult = regex.matchEntire(event.message.content.get())!!
+        val content = event.message.content.get()
+        println("Chegou '$content'")
+        val matchResult = regex.matchEntire(content)!!
         return Flux.just(event.message)
-            .flatMap(Message::getChannel)
-            .flatMap { channel ->
-                val description = matchResult.groups["description"]!!.value
-
-                val stringBuffer = StringBuffer()
-
-                stringBuffer.append(if (event.member.isPresent) event.member.get().mention else "**Você**")
-
-                if (description.isNotEmpty()) {
-                    stringBuffer.appendln(" __*$description*__")
+                .flatMap { it.channel }
+                .flatMap {
+                    val member = event.member.orElse(null)
+                    botMessage.send(it,
+                            extractDto(matchResult, it, member),
+                            member,
+                            if (matchResult.groupValues.contains("description")) matchResult.groups["description"]!!.value else null)
                 }
-                else {
-                    stringBuffer.appendln()
-                }
-
-                buildMessage(matchResult, stringBuffer)
-
-                channel.createMessage(stringBuffer.toString())
-            }.map { Unit }
     }
 }
