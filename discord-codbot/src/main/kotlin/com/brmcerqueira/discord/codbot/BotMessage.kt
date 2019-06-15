@@ -14,7 +14,7 @@ abstract class BotMessage<T> {
         stringBuffer.append(if (member != null) member.mention else "**Você**")
 
         if (description != null && description.isNotEmpty()) {
-            stringBuffer.appendln(" __*$description*__")
+            stringBuffer.appendln(" ${description.trim()}")
         }
         else {
             stringBuffer.appendln()
