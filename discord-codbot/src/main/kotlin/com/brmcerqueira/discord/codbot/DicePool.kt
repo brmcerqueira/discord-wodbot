@@ -11,13 +11,19 @@ class DicePool(private val dicePoolDto: DicePoolDto) {
         private set
 
     init {
-        val explosion =  if (dicePoolDto.explosion > 11 || dicePoolDto.explosion == 0) 11
-        else if (dicePoolDto.explosion < 8) 8
-        else dicePoolDto.explosion
+        val explosion = when {
+            dicePoolDto.explosion > 11 || dicePoolDto.explosion == 0 -> 11
+            dicePoolDto.explosion < 8 -> 8
+            else -> dicePoolDto.explosion
+        }
 
-        var amount = dicePoolDto.amount
+        var amount = when {
+            dicePoolDto.amount > 99 -> 99
+            dicePoolDto.amount < 0 -> 0
+            else -> dicePoolDto.amount
+        }
 
-        if (amount <= 0) {
+        if (amount == 0) {
             amount = 0
             val dice = randomDice()
             if(dice == 10) {
@@ -33,7 +39,8 @@ class DicePool(private val dicePoolDto: DicePoolDto) {
             }
         }
 
-        for (x in 0 until amount) {
+        var i = 1
+        while (i <= amount) {
             val dice = randomDice()
             if(dice >= 8) {
                 successes++
@@ -48,6 +55,7 @@ class DicePool(private val dicePoolDto: DicePoolDto) {
                 }
                 failureDices.add(dice)
             }
+            i++
         }
 
         successDices.sortDescending()
