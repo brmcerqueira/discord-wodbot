@@ -1,7 +1,7 @@
 package com.brmcerqueira.discord.codbot
 
-import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.MessageChannel
+import discord4j.core.`object`.util.Snowflake
 import discord4j.core.event.domain.message.MessageCreateEvent
 import reactor.core.publisher.Flux
 
@@ -11,7 +11,7 @@ abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>) : IProce
 
     protected abstract fun getRegex(): Regex
 
-    protected abstract fun extractDto(matchResult: MatchResult, channel: MessageChannel, member: Member?): T
+    protected abstract fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?): T
 
     override fun match(event: MessageCreateEvent): Boolean {
         return event.message.content.map { regex.matches(it) }.orElse(false)
@@ -22,10 +22,10 @@ abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>) : IProce
         return Flux.just(event.message)
                 .flatMap { it.channel }
                 .flatMap {
-                    val member = event.member.orElse(null)
+                    val userId = if (event.member.isPresent) event.member.get().id else null
                     botMessage.send(it,
-                            extractDto(matchResult, it, member),
-                            member,
+                            extractDto(matchResult, it, userId),
+                            userId,
                             try {
                                 val description = matchResult.groups["description"]!!.value
                                 if (description.isNotBlank() && description.isNotEmpty())

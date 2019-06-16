@@ -6,6 +6,7 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.MessageChannel
+import discord4j.core.`object`.util.Snowflake
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
@@ -53,11 +54,11 @@ fun main(args: Array<String>) {
             get("/") {
                 call.respondText("Codbot!", ContentType.Text.Html)
             }
-            post("/roll/dices", treatRequest<DicePoolModel> { dto, pair ->
-                DicePoolBotMessage().send(pair.first, DicePoolDto(dto.amount, dto.explosion, dto.isCanceller), pair.second, dto.description).subscribe()
+            post("/roll/dices", treatRequest<DicePoolModel> { dto, messageChannel, userId ->
+                DicePoolBotMessage().send(messageChannel, DicePoolDto(dto.amount, dto.explosion, dto.isCanceller), userId, dto.description).subscribe()
             })
-            post("/roll/initiative", treatRequest<InitiativeModel> { dto, pair ->
-                InitiativeBotMessage().send(pair.first, dto.amount, pair.second, dto.description).subscribe()
+            post("/roll/initiative", treatRequest<InitiativeModel> { dto, messageChannel, userId ->
+                InitiativeBotMessage().send(messageChannel, dto.amount, userId, dto.description).subscribe()
             })
         }
     }
@@ -66,12 +67,13 @@ fun main(args: Array<String>) {
 }
 
 @KtorExperimentalAPI
-private inline fun <reified T : Any> treatRequest(crossinline action: (T, Pair<MessageChannel, Member?>) -> Unit):
+private inline fun <reified T : Any> treatRequest(crossinline action: (T, MessageChannel, Snowflake) -> Unit):
         suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
-        val authorization = call.request.authorization()?.toBigIntegerOrNull()
+        val authorization = if (call.request.authorization() != null)
+            Snowflake.of(call.request.authorization()!!.toBigInteger()) else null
         if (authorization != null && usersHashMap.containsKey(authorization)) {
-            action(call.receive(), usersHashMap[authorization]!!)
+            action(call.receive(), usersHashMap[authorization]!!, authorization)
             call.respond(HttpStatusCode.OK)
         }
 
@@ -88,4 +90,4 @@ private fun Flux<MessageCreateEvent>.register(vararg processors: IProcessor): Fl
 
 fun randomDice() = Random.nextInt(1,11)
 
-val usersHashMap = HashMap<BigInteger, Pair<MessageChannel, Member?>>()
+val usersHashMap = HashMap<Snowflake, MessageChannel>()
