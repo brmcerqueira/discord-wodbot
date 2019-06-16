@@ -8,7 +8,7 @@ class CurrentProcessor : ReplyProcessor<Boolean>(CurrentBotMessage()) {
 
     override fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?) : Boolean {
         if (userId != null) {
-            usersHashMap[userId] = channel
+            messageChannel = channel
             return  true
         }
         return  false

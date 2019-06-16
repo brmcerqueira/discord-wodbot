@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.core.DiscordClientBuilder
+import discord4j.core.`object`.entity.Channel
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
+import discord4j.core.event.domain.guild.MemberJoinEvent
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
@@ -34,8 +36,6 @@ import kotlin.collections.HashMap
 fun main(args: Array<String>) {
     val client = DiscordClientBuilder(args.first()).build()
 
-    client.eventDispatcher.on(ReadyEvent::class.java).subscribe()
-
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
                     DicePoolProcessor(),
@@ -43,6 +43,12 @@ fun main(args: Array<String>) {
             .subscribe()
 
     client.login().subscribe()
+
+    messageChannel = client.eventDispatcher.on(ReadyEvent::class.java)
+            .flatMap { client.getGuildById(it.guilds.first().id) }
+            .flatMap { it.channels }
+            .filter { it.type  == Channel.Type.GUILD_TEXT }
+            .cast(MessageChannel::class.java).blockFirst()
 
     val server = embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 4100) {
         install(ContentNegotiation) {
@@ -72,8 +78,8 @@ private inline fun <reified T : Any> treatRequest(crossinline action: (T, Messag
     return {
         val authorization = if (call.request.authorization() != null)
             Snowflake.of(call.request.authorization()!!.toBigInteger()) else null
-        if (authorization != null && usersHashMap.containsKey(authorization)) {
-            action(call.receive(), usersHashMap[authorization]!!, authorization)
+        if (authorization != null && messageChannel != null) {
+            action(call.receive(), messageChannel!!, authorization)
             call.respond(HttpStatusCode.OK)
         }
 
@@ -90,4 +96,4 @@ private fun Flux<MessageCreateEvent>.register(vararg processors: IProcessor): Fl
 
 fun randomDice() = Random.nextInt(1,11)
 
-val usersHashMap = HashMap<Snowflake, MessageChannel>()
+var messageChannel: MessageChannel? = null
