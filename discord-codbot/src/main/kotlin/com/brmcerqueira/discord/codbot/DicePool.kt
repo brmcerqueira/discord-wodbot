@@ -17,10 +17,14 @@ class DicePool(private val dicePoolDto: DicePoolDto) {
             else -> dicePoolDto.explosion
         }
 
+        val total = if (dicePoolDto.modifier != null)
+            dicePoolDto.amount + dicePoolDto.modifier
+            else dicePoolDto.amount
+
         var amount = when {
-            dicePoolDto.amount > 99 -> 99
-            dicePoolDto.amount < 0 -> 0
-            else -> dicePoolDto.amount
+            total > 99 -> 99
+            total < 0 -> 0
+            else -> total
         }
 
         if (amount == 0) {

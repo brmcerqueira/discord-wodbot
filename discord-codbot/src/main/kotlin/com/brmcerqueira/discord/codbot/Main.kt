@@ -5,10 +5,8 @@ import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.`object`.entity.Channel
-import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
-import discord4j.core.event.domain.guild.MemberJoinEvent
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
@@ -29,8 +27,6 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.pipeline.PipelineContext
-import java.math.BigInteger
-import kotlin.collections.HashMap
 
 @KtorExperimentalAPI
 fun main(args: Array<String>) {
@@ -39,7 +35,7 @@ fun main(args: Array<String>) {
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
                     DicePoolProcessor(),
-                    CurrentProcessor())
+                    NarratorProcessor())
             .subscribe()
 
     client.login().subscribe()
@@ -97,3 +93,5 @@ private fun Flux<MessageCreateEvent>.register(vararg processors: IProcessor): Fl
 fun randomDice() = Random.nextInt(1,11)
 
 var messageChannel: MessageChannel? = null
+
+var modifier: Int? = null
