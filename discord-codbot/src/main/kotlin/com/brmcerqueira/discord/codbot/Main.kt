@@ -54,7 +54,36 @@ fun main(args: Array<String>) {
         }
         routing {
             get("/") {
-                call.respondText("Codbot!", ContentType.Text.Html)
+                call.respondText("""
+                    <!DOCTYPE html>
+                    <html>
+                    <body>
+                    <h1>Codbot</h1>
+                    <p>Último status:</p>
+                    <p id="lastStatus"></p>
+                    <script>
+                    function updateStatus() {
+                        document.getElementById("lastStatus").innerHTML = new Date().toLocaleTimeString();
+                    }
+                    setInterval(function() {
+                      var xhttp = new XMLHttpRequest();
+                      xhttp.onreadystatechange = function() {
+                        if (this.status == 200) {
+                            updateStatus();
+                        }
+                      };
+                      xhttp.open("GET", "keep/alive", true);
+                      xhttp.send();
+                    }, 60000);
+                    updateStatus();
+                    </script>
+                    </body>
+                    </html>
+                """.trimIndent(),
+                ContentType.Text.Html)
+            }
+            get("/keep/alive") {
+                call.respond(HttpStatusCode.OK, Unit)
             }
             post("/roll/dices", treatRequest<DicePoolModel> { dto, messageChannel, userId ->
                 DicePoolBotMessage().send(messageChannel, DicePoolDto(dto.amount, dto.explosion, dto.isCanceller), userId, dto.description).subscribe()

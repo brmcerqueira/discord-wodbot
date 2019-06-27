@@ -25,7 +25,7 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
         stringBuffer.append("]")
 
         if (dto.explosion in 8..10) {
-            stringBuffer.appendln("( Explosão = ${dto.explosion} )")
+            stringBuffer.appendln("( Explosão: ${dto.explosion} )")
         }
         else {
             stringBuffer.appendln("( Sem explosão )")
