@@ -1,6 +1,6 @@
 package com.brmcerqueira.discord.codbot
 
-class DicePool(private val dicePoolDto: DicePoolDto) {
+class DicePool(private val dicePoolDto: DicePoolDto, private val modifier: Int? = null) {
 
     var successes: Int = 0
         private set
@@ -17,8 +17,8 @@ class DicePool(private val dicePoolDto: DicePoolDto) {
             else -> dicePoolDto.explosion
         }
 
-        val total = if (dicePoolDto.modifier != null)
-            dicePoolDto.amount + dicePoolDto.modifier
+        val total = if (modifier != null)
+            dicePoolDto.amount + modifier
             else dicePoolDto.amount
 
         var amount = when {

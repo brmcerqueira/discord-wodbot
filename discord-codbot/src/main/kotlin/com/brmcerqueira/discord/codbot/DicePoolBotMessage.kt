@@ -4,17 +4,23 @@ import kotlin.math.abs
 
 class DicePoolBotMessage : BotMessage<DicePoolDto>() {
     override fun buildMessage(dto: DicePoolDto, stringBuffer: StringBuffer) {
-        val dicePool = DicePool(dto)
+        val modifierValue = modifier
+
+        if (modifier != null) {
+            modifier = null
+        }
+
+        val dicePool = DicePool(dto, modifierValue)
 
         stringBuffer.appendln("```md")
         stringBuffer.append("[ Dados: ")
 
-        if (dto.modifier != null) {
-            stringBuffer.append(dto.amount + dto.modifier)
+        if (modifierValue != null) {
+            stringBuffer.append(dto.amount + modifierValue)
             stringBuffer.append(" = ")
             stringBuffer.append(dto.amount)
-            stringBuffer.append(if (dto.modifier > 0) " + " else " - ")
-            stringBuffer.append(abs(dto.modifier))
+            stringBuffer.append(if (modifierValue > 0) " + " else " - ")
+            stringBuffer.append(abs(modifierValue))
             stringBuffer.append(" ")
         }
         else {
