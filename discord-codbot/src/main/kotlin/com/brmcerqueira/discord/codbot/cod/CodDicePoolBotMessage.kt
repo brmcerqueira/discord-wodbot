@@ -1,8 +1,11 @@
-package com.brmcerqueira.discord.codbot
+package com.brmcerqueira.discord.codbot.cod
 
+import com.brmcerqueira.discord.codbot.BotMessage
+import com.brmcerqueira.discord.codbot.DicePoolDto
+import com.brmcerqueira.discord.codbot.modifier
 import kotlin.math.abs
 
-class DicePoolBotMessage : BotMessage<DicePoolDto>() {
+class CodDicePoolBotMessage : BotMessage<DicePoolDto>() {
     override fun buildMessage(dto: DicePoolDto, stringBuffer: StringBuffer) {
         val modifierValue = modifier
 
@@ -10,7 +13,7 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
             modifier = null
         }
 
-        val dicePool = DicePool(dto, modifierValue)
+        val dicePool = CodDicePool(dto, modifierValue)
 
         stringBuffer.appendln("```md")
         stringBuffer.append("[ Dados: ")

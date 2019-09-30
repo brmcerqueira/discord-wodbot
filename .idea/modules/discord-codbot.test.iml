@@ -10,8 +10,6 @@
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="discord-codbot" />
-          <option name="addCompilerBuiltIns" value="true" />
-          <option name="loadBuiltInsFromDependencies" value="true" />
           <option name="friendPaths">
             <array>
               <option value="$MODULE_DIR$/../../discord-codbot/build/classes/java/main" />
@@ -34,7 +32,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
-    <output-test url="file://$MODULE_DIR$/../../discord-codbot/out/test/classes" />
+    <output-test url="file://$MODULE_DIR$/../../discord-codbot/build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../discord-codbot/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../discord-codbot/src/test/java" isTestSource="true" />

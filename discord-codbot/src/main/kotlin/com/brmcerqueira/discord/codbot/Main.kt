@@ -1,5 +1,7 @@
 package com.brmcerqueira.discord.codbot
 
+import com.brmcerqueira.discord.codbot.cod.CodDicePoolBotMessage
+import com.brmcerqueira.discord.codbot.cod.CodDicePoolProcessor
 import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
@@ -34,7 +36,7 @@ fun main(args: Array<String>) {
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
-                    DicePoolProcessor(),
+                    CodDicePoolProcessor(),
                     NarratorProcessor())
             .subscribe()
 
@@ -85,12 +87,8 @@ fun main(args: Array<String>) {
             get("/keep/alive") {
                 call.respond(HttpStatusCode.OK, Unit)
             }
-            post("/roll/dices", treatRequest<DicePoolModel> { dto, messageChannel, userId ->
-                DicePoolBotMessage().send(messageChannel, DicePoolDto(dto.amount, dto.explosion, dto.isCanceller), userId, dto.description).subscribe()
-            })
-            post("/roll/initiative", treatRequest<InitiativeModel> { dto, messageChannel, userId ->
-                InitiativeBotMessage().send(messageChannel, dto.amount, userId, dto.description).subscribe()
-            })
+            post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(CodDicePoolBotMessage()) { DicePoolDto(it.amount, it.explosion, it.isCanceller) })
+            post("/roll/initiative", treatRequest<InitiativeModel, Int>(InitiativeBotMessage()) { it.amount })
         }
     }
 
@@ -98,13 +96,15 @@ fun main(args: Array<String>) {
 }
 
 @KtorExperimentalAPI
-private inline fun <reified T : Any> treatRequest(crossinline action: (T, MessageChannel, Snowflake) -> Unit):
+private inline fun <reified TDescription : IDescription, reified T : Any> treatRequest(botMessage: BotMessage<T>, crossinline action: (TDescription) -> T):
         suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
         val authorization = if (call.request.authorization() != null)
             Snowflake.of(call.request.authorization()!!.toBigInteger()) else null
+
         if (authorization != null && messageChannel != null) {
-            action(call.receive(), messageChannel!!, authorization)
+            val dto: TDescription = call.receive()
+            botMessage.send(messageChannel!!, action(dto), authorization, dto.description).subscribe()
             call.respond(HttpStatusCode.OK)
         }
 

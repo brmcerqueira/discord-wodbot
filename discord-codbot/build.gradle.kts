@@ -12,7 +12,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "4.0.3"
 }
 
-
 repositories {
     mavenCentral()
 }
@@ -28,11 +27,10 @@ dependencies {
 application {
     mainClassName = "com.brmcerqueira.discord.codbot.MainKt"
     applicationDefaultJvmArgs = listOf("-XX:+UseContainerSupport")
-
 }
 
 tasks.withType<ShadowJar> {
-    classifier = "fat"
+    archiveClassifier.set("fat")
     manifest {
         attributes(mapOf("Main-Verticle" to application.mainClassName))
     }

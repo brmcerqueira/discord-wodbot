@@ -1,6 +1,9 @@
-package com.brmcerqueira.discord.codbot
+package com.brmcerqueira.discord.codbot.cod
 
-class DicePool(private val dicePoolDto: DicePoolDto, private val modifier: Int? = null) {
+import com.brmcerqueira.discord.codbot.DicePoolDto
+import com.brmcerqueira.discord.codbot.randomDice
+
+class CodDicePool(private val dicePoolDto: DicePoolDto, private val modifier: Int? = null) {
 
     var successes: Int = 0
         private set
