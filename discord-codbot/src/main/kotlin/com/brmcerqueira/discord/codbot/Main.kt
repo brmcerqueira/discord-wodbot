@@ -2,6 +2,12 @@ package com.brmcerqueira.discord.codbot
 
 import com.brmcerqueira.discord.codbot.cod.CodDicePoolBotMessage
 import com.brmcerqueira.discord.codbot.cod.CodDicePoolProcessor
+import com.brmcerqueira.discord.codbot.cod.CodDicePoolDto
+import com.brmcerqueira.discord.codbot.initiative.InitiativeBotMessage
+import com.brmcerqueira.discord.codbot.initiative.InitiativeModel
+import com.brmcerqueira.discord.codbot.initiative.InitiativeProcessor
+import com.brmcerqueira.discord.codbot.narrator.NarratorProcessor
+import com.brmcerqueira.discord.codbot.wod.WodDicePoolProcessor
 import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
@@ -36,6 +42,7 @@ fun main(args: Array<String>) {
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
+                    WodDicePoolProcessor(),
                     CodDicePoolProcessor(),
                     NarratorProcessor())
             .subscribe()
@@ -56,6 +63,7 @@ fun main(args: Array<String>) {
         }
         routing {
             get("/") {
+                isCod = call.request.queryParameters["cod"] != null
                 call.respondText("""
                     <!DOCTYPE html>
                     <html>
@@ -87,7 +95,7 @@ fun main(args: Array<String>) {
             get("/keep/alive") {
                 call.respond(HttpStatusCode.OK, Unit)
             }
-            post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(CodDicePoolBotMessage()) { DicePoolDto(it.amount, it.explosion, it.isCanceller) })
+            post("/roll/dices", treatRequest<DicePoolModel, CodDicePoolDto>(CodDicePoolBotMessage()) { CodDicePoolDto(it.amount, it.explosion, it.isCanceller) })
             post("/roll/initiative", treatRequest<InitiativeModel, Int>(InitiativeBotMessage()) { it.amount })
         }
     }
@@ -121,6 +129,10 @@ private fun Flux<MessageCreateEvent>.register(vararg processors: IProcessor): Fl
 
 fun randomDice() = Random.nextInt(1,11)
 
+fun ArrayList<Int>.format(): String =  if (this.isEmpty()) "-" else this.joinToString(" - ")
+
 var messageChannel: MessageChannel? = null
 
 var modifier: Int? = null
+
+var isCod = false

@@ -5,7 +5,7 @@ import discord4j.core.`object`.util.Snowflake
 import discord4j.core.event.domain.message.MessageCreateEvent
 import reactor.core.publisher.Flux
 
-abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>) : IProcessor {
+abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>, private val customMatch: (() -> Boolean)? = null) : IProcessor {
 
     private val regex = getRegex()
 
@@ -14,7 +14,7 @@ abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>) : IProce
     protected abstract fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?): T
 
     override fun match(event: MessageCreateEvent): Boolean {
-        return event.message.content.map { regex.matches(it) }.orElse(false)
+        return (customMatch == null || customMatch.invoke()) && event.message.content.map { regex.matches(it) }.orElse(false)
     }
 
     override fun go(event: MessageCreateEvent): Flux<Unit> {

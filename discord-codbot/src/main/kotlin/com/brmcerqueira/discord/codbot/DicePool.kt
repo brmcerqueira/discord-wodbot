@@ -1,9 +1,10 @@
-package com.brmcerqueira.discord.codbot.cod
+package com.brmcerqueira.discord.codbot
 
-import com.brmcerqueira.discord.codbot.DicePoolDto
-import com.brmcerqueira.discord.codbot.randomDice
-
-class CodDicePool(private val dicePoolDto: DicePoolDto, private val modifier: Int? = null) {
+class DicePool(private val amount: Int,
+               private val difficulty: Int,
+               private val explosion: Int,
+               private val isCanceller: Boolean,
+               private val modifier: Int? = null) {
 
     var successes: Int = 0
         private set
@@ -14,15 +15,15 @@ class CodDicePool(private val dicePoolDto: DicePoolDto, private val modifier: In
         private set
 
     init {
-        val explosion = when {
-            dicePoolDto.explosion > 11 || dicePoolDto.explosion == 0 -> 11
-            dicePoolDto.explosion < 8 -> 8
-            else -> dicePoolDto.explosion
+        val expl = when {
+            explosion > 11 || explosion == 0 -> 11
+            explosion < 8 -> 8
+            else -> explosion
         }
 
         val total = if (modifier != null)
-            dicePoolDto.amount + modifier
-            else dicePoolDto.amount
+            amount + modifier
+            else amount
 
         var amount = when {
             total > 99 -> 99
@@ -30,7 +31,7 @@ class CodDicePool(private val dicePoolDto: DicePoolDto, private val modifier: In
             else -> total
         }
 
-        if (amount == 0) {
+        if (isCod && amount == 0) {
             amount = 0
             val dice = randomDice()
             if(dice == 10) {
@@ -46,19 +47,40 @@ class CodDicePool(private val dicePoolDto: DicePoolDto, private val modifier: In
             }
         }
 
+        var margin = 0
+
         var i = 1
         while (i <= amount) {
             val dice = randomDice()
-            if(dice >= 8) {
+            if(dice >= difficulty) {
                 successes++
-                if(dice >= explosion) {
+
+                if(dice >= expl) {
                     amount++
+                    if (!isCod) {
+                        margin++
+                    }
                 }
+
+                if (!isCod) {
+                    isCriticalFailure = false
+                }
+
                 successDices.add(dice)
             }
             else {
-                if(dicePoolDto.isCanceller && dice == 1) {
+                if(isCanceller && dice == 1) {
                     successes--
+                    if (!isCod) {
+                        if (margin > 0) {
+                            margin--
+                            amount--
+                        }
+
+                        if (successDices.isEmpty()) {
+                            isCriticalFailure = true
+                        }
+                    }
                 }
                 failureDices.add(dice)
             }
