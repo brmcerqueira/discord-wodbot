@@ -3,10 +3,14 @@ package com.brmcerqueira.discord.codbot
 import com.brmcerqueira.discord.codbot.cod.CodDicePoolBotMessage
 import com.brmcerqueira.discord.codbot.cod.CodDicePoolProcessor
 import com.brmcerqueira.discord.codbot.cod.CodDicePoolDto
+import com.brmcerqueira.discord.codbot.cod.CodDicePoolModel
 import com.brmcerqueira.discord.codbot.initiative.InitiativeBotMessage
 import com.brmcerqueira.discord.codbot.initiative.InitiativeModel
 import com.brmcerqueira.discord.codbot.initiative.InitiativeProcessor
 import com.brmcerqueira.discord.codbot.narrator.NarratorProcessor
+import com.brmcerqueira.discord.codbot.wod.WodDicePoolBotMessage
+import com.brmcerqueira.discord.codbot.wod.WodDicePoolDto
+import com.brmcerqueira.discord.codbot.wod.WodDicePoolModel
 import com.brmcerqueira.discord.codbot.wod.WodDicePoolProcessor
 import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
@@ -95,7 +99,8 @@ fun main(args: Array<String>) {
             get("/keep/alive") {
                 call.respond(HttpStatusCode.OK, Unit)
             }
-            post("/roll/dices", treatRequest<DicePoolModel, CodDicePoolDto>(CodDicePoolBotMessage()) { CodDicePoolDto(it.amount, it.explosion, it.isCanceller) })
+            post("/wod/roll/dices", treatRequest<WodDicePoolModel, WodDicePoolDto>(WodDicePoolBotMessage()) { WodDicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
+            post("/cod/roll/dices", treatRequest<CodDicePoolModel, CodDicePoolDto>(CodDicePoolBotMessage()) { CodDicePoolDto(it.amount, it.explosion, it.isCanceller) })
             post("/roll/initiative", treatRequest<InitiativeModel, Int>(InitiativeBotMessage()) { it.amount })
         }
     }
