@@ -1,4 +1,4 @@
-package com.brmcerqueira.discord.codbot
+package com.brmcerqueira.discord.wodbot
 
 class DicePool(private val amount: Int,
                private val difficulty: Int,

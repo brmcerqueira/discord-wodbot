@@ -1,7 +1,7 @@
-package com.brmcerqueira.discord.codbot.initiative
+package com.brmcerqueira.discord.wodbot.initiative
 
-import com.brmcerqueira.discord.codbot.BotMessage
-import com.brmcerqueira.discord.codbot.randomDice
+import com.brmcerqueira.discord.wodbot.BotMessage
+import com.brmcerqueira.discord.wodbot.randomDice
 
 class InitiativeBotMessage : BotMessage<Int>() {
     override fun buildMessage(dto: Int, stringBuffer: StringBuffer) {

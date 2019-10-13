@@ -1,12 +1,12 @@
-package com.brmcerqueira.discord.codbot.wod
+package com.brmcerqueira.discord.wodbot.dicepool
 
-import com.brmcerqueira.discord.codbot.BotMessage
-import com.brmcerqueira.discord.codbot.DicePool
-import com.brmcerqueira.discord.codbot.format
-import com.brmcerqueira.discord.codbot.modifier
+import com.brmcerqueira.discord.wodbot.BotMessage
+import com.brmcerqueira.discord.wodbot.DicePool
+import com.brmcerqueira.discord.wodbot.format
+import com.brmcerqueira.discord.wodbot.modifier
 
-class WodDicePoolBotMessage : BotMessage<WodDicePoolDto>() {
-    override fun buildMessage(dto: WodDicePoolDto, stringBuffer: StringBuffer) {
+class DicePoolBotMessage : BotMessage<DicePoolDto>() {
+    override fun buildMessage(dto: DicePoolDto, stringBuffer: StringBuffer) {
         val difficulty = modifier ?: dto.difficulty
 
         if (modifier != null) {

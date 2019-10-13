@@ -1,4 +1,4 @@
-package com.brmcerqueira.discord.codbot
+package com.brmcerqueira.discord.wodbot
 
 interface IDescription {
     val description: String?

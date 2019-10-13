@@ -10,6 +10,8 @@
       <module name="discord-cofbot.test" target="11" />
       <module name="discord-cofbot_main" target="11" />
       <module name="discord-cofbot_test" target="11" />
+      <module name="discord-wodbot.main" target="11" />
+      <module name="discord-wodbot.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

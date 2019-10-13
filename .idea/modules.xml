@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/discord-codbot.iml" filepath="$PROJECT_DIR$/.idea/modules/discord-codbot.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/discord-codbot.main.iml" filepath="$PROJECT_DIR$/.idea/modules/discord-codbot.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/discord-codbot.test.iml" filepath="$PROJECT_DIR$/.idea/modules/discord-codbot.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/discord-wodbot.iml" filepath="$PROJECT_DIR$/.idea/modules/discord-wodbot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/discord-wodbot.main.iml" filepath="$PROJECT_DIR$/.idea/modules/discord-wodbot.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/discord-wodbot.test.iml" filepath="$PROJECT_DIR$/.idea/modules/discord-wodbot.test.iml" />
     </modules>
   </component>
 </project>

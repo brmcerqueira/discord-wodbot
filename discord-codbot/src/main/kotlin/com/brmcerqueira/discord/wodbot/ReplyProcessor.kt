@@ -1,4 +1,4 @@
-package com.brmcerqueira.discord.codbot
+package com.brmcerqueira.discord.wodbot
 
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake

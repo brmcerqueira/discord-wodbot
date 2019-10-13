@@ -1,6 +1,6 @@
-package com.brmcerqueira.discord.codbot.initiative
+package com.brmcerqueira.discord.wodbot.initiative
 
-import com.brmcerqueira.discord.codbot.ReplyProcessor
+import com.brmcerqueira.discord.wodbot.ReplyProcessor
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
 

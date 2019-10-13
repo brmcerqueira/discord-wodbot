@@ -1,8 +1,8 @@
-package com.brmcerqueira.discord.codbot.narrator
+package com.brmcerqueira.discord.wodbot.narrator
 
-import com.brmcerqueira.discord.codbot.ReplyProcessor
-import com.brmcerqueira.discord.codbot.messageChannel
-import com.brmcerqueira.discord.codbot.modifier
+import com.brmcerqueira.discord.wodbot.ReplyProcessor
+import com.brmcerqueira.discord.wodbot.messageChannel
+import com.brmcerqueira.discord.wodbot.modifier
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
 

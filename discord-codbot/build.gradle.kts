@@ -25,7 +25,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.brmcerqueira.discord.codbot.MainKt"
+    mainClassName = "com.brmcerqueira.discord.wodbot.MainKt"
     applicationDefaultJvmArgs = listOf("-XX:+UseContainerSupport")
 }
 

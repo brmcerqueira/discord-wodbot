@@ -1,7 +1,7 @@
-package com.brmcerqueira.discord.codbot.narrator
+package com.brmcerqueira.discord.wodbot.narrator
 
-import com.brmcerqueira.discord.codbot.BotMessage
-import com.brmcerqueira.discord.codbot.isCod
+import com.brmcerqueira.discord.wodbot.BotMessage
+import com.brmcerqueira.discord.wodbot.isCod
 
 class NarratorBotMessage : BotMessage<NarratorDto>() {
     override fun buildMessage(dto: NarratorDto, stringBuffer: StringBuffer) {

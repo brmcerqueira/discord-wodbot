@@ -1,1 +1,1 @@
-rootProject.name = "discord-codbot"
+rootProject.name = "discord-wodbot"
