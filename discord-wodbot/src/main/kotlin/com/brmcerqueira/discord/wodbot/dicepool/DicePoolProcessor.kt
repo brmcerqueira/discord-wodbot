@@ -1,11 +1,10 @@
 package com.brmcerqueira.discord.wodbot.dicepool
 
 import com.brmcerqueira.discord.wodbot.ReplyProcessor
-import com.brmcerqueira.discord.wodbot.isCod
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
 
-class DicePoolProcessor : ReplyProcessor<DicePoolDto>(DicePoolBotMessage(), { !isCod }) {
+class DicePoolProcessor : ReplyProcessor<DicePoolDto>(DicePoolBotMessage()) {
     override fun getRegex(): Regex = "^%(?<isSpecialization>\\?)?(?<isCanceller>!)?(?<dices>[1-9]?\\d)\\s*(\\*(?<difficulty>[1-9]?\\d))?(?<description>.*)\$".toRegex()
 
     override fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?): DicePoolDto {

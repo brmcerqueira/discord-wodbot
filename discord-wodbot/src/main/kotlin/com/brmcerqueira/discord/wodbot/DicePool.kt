@@ -31,22 +31,6 @@ class DicePool(private val amount: Int,
             else -> total
         }
 
-        if (isCod && amount == 0) {
-            amount = 0
-            val dice = randomDice()
-            if(dice == 10) {
-                successes++
-                amount++
-                successDices.add(dice)
-            }
-            else {
-                if(dice == 1) {
-                    isCriticalFailure = true
-                }
-                failureDices.add(dice)
-            }
-        }
-
         var margin = 0
 
         var i = 1
@@ -57,29 +41,23 @@ class DicePool(private val amount: Int,
 
                 if(dice >= expl) {
                     amount++
-                    if (!isCod) {
-                        margin++
-                    }
+                    margin++
                 }
 
-                if (!isCod) {
-                    isCriticalFailure = false
-                }
+                isCriticalFailure = false
 
                 successDices.add(dice)
             }
             else {
                 if(isCanceller && dice == 1) {
                     successes--
-                    if (!isCod) {
-                        if (margin > 0) {
-                            margin--
-                            amount--
-                        }
+                    if (margin > 0) {
+                        margin--
+                        amount--
+                    }
 
-                        if (successDices.isEmpty()) {
-                            isCriticalFailure = true
-                        }
+                    if (successDices.isEmpty()) {
+                        isCriticalFailure = true
                     }
                 }
                 failureDices.add(dice)
