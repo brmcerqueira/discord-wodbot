@@ -1,5 +1,7 @@
 # discord-wodbot
 
+``gradle run --args="<VALUE>"``
+
 ``docker build --no-cache -t discord-wodbot:latest --build-arg PROJECT_TOKEN=<VALUE> .``
 
 ``docker run --name discord-wodbot -it -d -p 8085:8080 discord-codbot``
