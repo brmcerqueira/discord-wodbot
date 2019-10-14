@@ -3,6 +3,7 @@ package com.brmcerqueira.discord.wodbot.narrator
 import com.brmcerqueira.discord.wodbot.BotMessage
 import com.brmcerqueira.discord.wodbot.messageChannel
 import com.brmcerqueira.discord.wodbot.difficulty
+import com.brmcerqueira.discord.wodbot.initiativeQueue
 import discord4j.core.`object`.entity.MessageChannel
 
 class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
@@ -24,6 +25,10 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
                     else "A dificuldade deve ser maior igual a '3' e menor igual a '9'. -> $value"
                 }
                 else "O comando 'dif' não tem argumentos válidos. -> $arguments"
+            }
+            "reset" -> {
+                initiativeQueue.clear()
+                "Ok! Fila de iniciativa vazia!"
             }
             "here" -> {
                 messageChannel = dto.second
