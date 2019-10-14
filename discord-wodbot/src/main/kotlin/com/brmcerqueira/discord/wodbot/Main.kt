@@ -1,14 +1,11 @@
 package com.brmcerqueira.discord.wodbot
 
-import com.brmcerqueira.discord.wodbot.initiative.InitiativeBotMessage
-import com.brmcerqueira.discord.wodbot.initiative.InitiativeModel
-import com.brmcerqueira.discord.wodbot.initiative.InitiativeProcessor
 import com.brmcerqueira.discord.wodbot.narrator.NarratorProcessor
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolBotMessage
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolDto
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolModel
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolProcessor
-import com.brmcerqueira.discord.wodbot.initiative.InitiativeDto
+import com.brmcerqueira.discord.wodbot.initiative.*
 import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
@@ -36,6 +33,8 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.pipeline.PipelineContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 @KtorExperimentalAPI
 fun main(args: Array<String>) {
@@ -94,9 +93,9 @@ fun main(args: Array<String>) {
             get("/keep/alive") {
                 call.respond(HttpStatusCode.OK, Unit)
             }
-            post("/wod/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { DicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
-            post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { DicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
-            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) { InitiativeDto(it.amount, it.withoutPenalty, it.actions) })
+            post("/wod/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { dto, _ -> DicePoolDto(dto.amount, dto.difficulty, dto.isCanceller, dto.isSpecialization) })
+            post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { dto, _ -> DicePoolDto(dto.amount, dto.difficulty, dto.isCanceller, dto.isSpecialization) })
+            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) { dto, authorization -> InitiativeDto(authorization, dto.amount, dto.withoutPenalty, dto.actions) })
         }
     }
 
@@ -104,15 +103,15 @@ fun main(args: Array<String>) {
 }
 
 @KtorExperimentalAPI
-private inline fun <reified TDescription : IDescription, reified T : Any> treatRequest(botMessage: BotMessage<T>, crossinline action: (TDescription) -> T):
+private inline fun <reified TDto : IDescription, reified T : Any> treatRequest(botMessage: BotMessage<T>, crossinline action: (TDto, Snowflake) -> T):
         suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
         val authorization = if (call.request.authorization() != null)
             Snowflake.of(call.request.authorization()!!.toBigInteger()) else null
 
         if (authorization != null && messageChannel != null) {
-            val dto: TDescription = call.receive()
-            botMessage.send(messageChannel!!, action(dto), authorization, dto.description).subscribe()
+            val dto: TDto = call.receive()
+            botMessage.send(messageChannel!!, action(dto, authorization), authorization, dto.description).subscribe()
             call.respond(HttpStatusCode.OK)
         }
 
@@ -134,3 +133,23 @@ fun ArrayList<Int>.format(): String =  if (this.isEmpty()) "-" else this.joinToS
 var messageChannel: MessageChannel? = null
 
 var difficulty: Int? = null
+
+val initiativeQueue = PriorityQueue<InitiativeQueueItem> { left, right ->
+    when {
+        left.amount > right.amount -> -1
+        left.amount < right.amount -> 1
+        else -> 0
+    }
+}
+
+fun MatchResult.getDescription(): String? {
+    return try {
+        val description = this.groups["description"]!!.value
+        if (description.isNotBlank() && description.isNotEmpty())
+            description
+        else null
+    }
+    catch (ex: IllegalArgumentException) {
+        null
+    }
+}

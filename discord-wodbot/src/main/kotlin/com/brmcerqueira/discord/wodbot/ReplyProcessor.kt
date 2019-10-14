@@ -26,15 +26,7 @@ abstract class ReplyProcessor<T>(private val botMessage: BotMessage<T>, private 
                     botMessage.send(it,
                             extractDto(matchResult, it, userId),
                             userId,
-                            try {
-                                val description = matchResult.groups["description"]!!.value
-                                if (description.isNotBlank() && description.isNotEmpty())
-                                    description
-                                else null
-                            }
-                            catch (ex: IllegalArgumentException) {
-                                null
-                            })
+                            matchResult.getDescription())
                 }
     }
 }
