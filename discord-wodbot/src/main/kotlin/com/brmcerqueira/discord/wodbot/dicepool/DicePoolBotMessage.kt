@@ -33,12 +33,11 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
         stringBuffer.appendln("# Resultado")
         stringBuffer.appendln("[ ${dicePool.successDices.format()} ][ ${dicePool.failureDices.format()} ]")
 
-        if (dicePool.isCriticalFailure) {
-            stringBuffer.appendln("/* Falha Crítica *")
-        }
-        else {
-            stringBuffer.appendln("< Sucessos = ${dicePool.successes} >")
-        }
+        stringBuffer.appendln(when {
+            dicePool.isCriticalFailure -> "/* Falha Crítica *"
+            dicePool.successes <= 0 -> "< Falha >"
+            else -> "< Sucessos = ${dicePool.successes} >"
+        })
 
         stringBuffer.append("```")
     }
