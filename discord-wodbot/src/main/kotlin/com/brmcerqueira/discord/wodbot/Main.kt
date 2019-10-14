@@ -8,6 +8,7 @@ import com.brmcerqueira.discord.wodbot.dicepool.DicePoolBotMessage
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolDto
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolModel
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolProcessor
+import com.brmcerqueira.discord.wodbot.initiative.InitiativeDto
 import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
@@ -95,7 +96,7 @@ fun main(args: Array<String>) {
             }
             post("/wod/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { DicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
             post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { DicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
-            post("/roll/initiative", treatRequest<InitiativeModel, Int>(InitiativeBotMessage()) { it.amount })
+            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) { InitiativeDto(it.amount, it.withoutPenalty, it.actions) })
         }
     }
 
