@@ -35,7 +35,7 @@ class DicePool(private val amount: Int,
 
         var i = 1
         while (i <= amount) {
-            val dice = randomDice()
+            val dice = Wod.randomDice()
             if(dice >= difficulty) {
                 successes++
 

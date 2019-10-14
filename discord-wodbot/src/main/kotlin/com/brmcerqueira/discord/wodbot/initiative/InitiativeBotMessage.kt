@@ -1,38 +1,22 @@
 package com.brmcerqueira.discord.wodbot.initiative
 
 import com.brmcerqueira.discord.wodbot.BotMessage
-import com.brmcerqueira.discord.wodbot.initiativeQueue
-import com.brmcerqueira.discord.wodbot.randomDice
-import java.util.*
+import com.brmcerqueira.discord.wodbot.Wod
 
 class InitiativeBotMessage : BotMessage<InitiativeDto>() {
     override fun buildMessage(dto: InitiativeDto, stringBuffer: StringBuffer) {
-        val dice = randomDice()
+        val dice = Wod.randomDice()
 
-        val initiativeQueueItem =  InitiativeQueueItem(dto.userId,dto.amount + dice, dto.name)
+        val initiativeQueueItem =  InitiativeQueueItem(dto.userId, dto.amount,dto.amount + dice, dto.name)
 
-        initiativeQueue.add(initiativeQueueItem)
+        Wod.addInitiativeItem(initiativeQueueItem, dto.withoutPenalty, dto.actions)
 
         stringBuffer.appendln("```md")
 
-        stringBuffer.appendln("< ${dto.amount} + $dice = ${initiativeQueueItem.amount} >")
+        stringBuffer.appendln("< ${dto.amount} + $dice = ${initiativeQueueItem.total} >")
 
         stringBuffer.append("```")
 
-        stringBuffer.appendln("__***Resumo***__")
-
-        val queue = PriorityQueue(initiativeQueue)
-
-        var index = 1
-        while (queue.peek() != null)
-        {
-            val item = queue.poll()
-            stringBuffer.append("$index. <@${item.userId.asString()}>")
-            if(item.name != null) {
-                stringBuffer.append("(${item.name})")
-            }
-            stringBuffer.appendln(" -> ${item.amount}")
-            index++
-        }
+        Wod.printInitiativeQueue(stringBuffer)
     }
 }

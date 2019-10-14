@@ -25,7 +25,6 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import reactor.core.publisher.Flux
-import kotlin.random.Random
 import io.ktor.jackson.*
 import io.ktor.request.authorization
 import io.ktor.request.receive
@@ -33,7 +32,6 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.pipeline.PipelineContext
-import java.util.*
 import kotlin.collections.ArrayList
 
 @KtorExperimentalAPI
@@ -48,7 +46,7 @@ fun main(args: Array<String>) {
 
     client.login().subscribe()
 
-    messageChannel = client.eventDispatcher.on(ReadyEvent::class.java)
+    Wod.messageChannel = client.eventDispatcher.on(ReadyEvent::class.java)
             .flatMap { client.getGuildById(it.guilds.first().id) }
             .flatMap { it.channels }
             .filter { it.type  == Channel.Type.GUILD_TEXT }
@@ -109,9 +107,9 @@ private inline fun <reified TDto : IDescription, reified T : Any> treatRequest(b
         val authorization = if (call.request.authorization() != null)
             Snowflake.of(call.request.authorization()!!.toBigInteger()) else null
 
-        if (authorization != null && messageChannel != null) {
+        if (authorization != null && Wod.messageChannel != null) {
             val dto: TDto = call.receive()
-            botMessage.send(messageChannel!!, action(dto, authorization), authorization, dto.description).subscribe()
+            botMessage.send(Wod.messageChannel!!, action(dto, authorization), authorization, dto.description).subscribe()
             call.respond(HttpStatusCode.OK)
         }
 
@@ -126,21 +124,7 @@ private fun Flux<MessageCreateEvent>.register(vararg processors: IProcessor): Fl
     }
 }
 
-fun randomDice() = Random.nextInt(1,11)
-
 fun ArrayList<Int>.format(): String =  if (this.isEmpty()) "-" else this.joinToString(" - ")
-
-var messageChannel: MessageChannel? = null
-
-var difficulty: Int? = null
-
-val initiativeQueue = PriorityQueue<InitiativeQueueItem> { left, right ->
-    when {
-        left.amount > right.amount -> -1
-        left.amount < right.amount -> 1
-        else -> 0
-    }
-}
 
 fun MatchResult.getDescription(): String? {
     return try {
