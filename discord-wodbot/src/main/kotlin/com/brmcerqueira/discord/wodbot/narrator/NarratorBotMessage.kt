@@ -2,7 +2,7 @@ package com.brmcerqueira.discord.wodbot.narrator
 
 import com.brmcerqueira.discord.wodbot.BotMessage
 import com.brmcerqueira.discord.wodbot.messageChannel
-import com.brmcerqueira.discord.wodbot.modifier
+import com.brmcerqueira.discord.wodbot.difficulty
 import discord4j.core.`object`.entity.MessageChannel
 
 class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
@@ -15,12 +15,15 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
 
         stringBuffer.appendln(when(command) {
             "dif" -> {
-                if (arguments != null && arguments.isNotEmpty()
-                        && arguments[0].toIntOrNull() != null && arguments[0].toIntOrNull() in 3..9) {
-                    modifier = arguments[0].toInt()
-                    "Ajustou a dificuldade para $modifier."
+                if (arguments != null && arguments.isNotEmpty() && arguments[0].toIntOrNull() != null && arguments[0].toIntOrNull() in 3..9) {
+                    val value = arguments[0].toInt()
+                    if (value in 3..9) {
+                        difficulty = value
+                        "O narrador ajustou a dificuldade para $difficulty."
+                    }
+                    else "A dificuldade deve ser maior igual a '3' e menor igual a '9' -> $value"
                 }
-                else "O comando 'dif' não tem argumentos válidos: $arguments"
+                else "O comando 'dif' não tem argumentos válidos -> $arguments"
             }
             "here" -> {
                 messageChannel = dto.second

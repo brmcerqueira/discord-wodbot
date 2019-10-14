@@ -131,4 +131,4 @@ fun ArrayList<Int>.format(): String =  if (this.isEmpty()) "-" else this.joinToS
 
 var messageChannel: MessageChannel? = null
 
-var modifier: Int? = null
+var difficulty: Int? = null
