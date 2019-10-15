@@ -2,6 +2,7 @@ package com.brmcerqueira.discord.wodbot.narrator
 
 import com.brmcerqueira.discord.wodbot.BotMessage
 import com.brmcerqueira.discord.wodbot.Wod
+import com.brmcerqueira.discord.wodbot.initiative.InitiativeManager
 import discord4j.core.`object`.entity.MessageChannel
 
 class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
@@ -25,7 +26,7 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
                 else "O comando 'dif' não tem argumentos válidos. -> $arguments"
             }
             "reset" -> {
-                Wod.clearInitiativeQueue()
+                InitiativeManager.clearInitiativeQueue()
                 "Ok! Fila de iniciativa vazia!"
             }
             "here" -> {

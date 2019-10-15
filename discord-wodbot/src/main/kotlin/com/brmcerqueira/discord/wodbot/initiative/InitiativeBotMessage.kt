@@ -9,7 +9,7 @@ class InitiativeBotMessage : BotMessage<InitiativeDto>() {
 
         val initiativeQueueItem =  InitiativeQueueItem(dto.userId, dto.amount,dto.amount + dice, dto.name)
 
-        Wod.addInitiativeItem(initiativeQueueItem, dto.withoutPenalty, dto.actions)
+        InitiativeManager.addInitiativeItem(initiativeQueueItem, dto.withoutPenalty, dto.actions)
 
         stringBuffer.appendln("```md")
 
@@ -17,6 +17,6 @@ class InitiativeBotMessage : BotMessage<InitiativeDto>() {
 
         stringBuffer.append("```")
 
-        Wod.printInitiativeQueue(stringBuffer)
+        InitiativeManager.printInitiativeQueue(stringBuffer)
     }
 }
