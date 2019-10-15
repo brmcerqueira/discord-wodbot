@@ -6,7 +6,7 @@ import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
 
 class InitiativeProcessor : ReplyProcessor<InitiativeDto>(InitiativeBotMessage()) {
-    override fun getRegex(): Regex = "^!(?<amount>[1-9]?\\d)\\s*(%(?<withoutPenalty>\\*)?(?<actions>[2-9]))?(?<description>.*)\$".toRegex()
+    override fun getRegex(): Regex = "^!(?<amount>[1-9]?\\d)\\s*(\\*(?<withoutPenalty>!)?(?<actions>[2-9]))?(?<description>.*)\$".toRegex()
 
     override fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?): InitiativeDto
             = InitiativeDto(userId!!,

@@ -1,6 +1,7 @@
 package com.brmcerqueira.discord.wodbot.initiative
 
 import com.brmcerqueira.discord.wodbot.Wod
+import discord4j.core.`object`.util.Snowflake
 import java.util.*
 import kotlin.Comparator
 
@@ -64,6 +65,25 @@ object InitiativeManager {
         }
     }
 
+    private fun PriorityQueue<InitiativeItem>.remove(userId: Snowflake?, characterId: Int?, amount: Int?) {
+        var total = 0
+        this.removeIf {
+            when {
+                amount != null && amount > total && characterId != null && it.characterId == characterId -> {
+                    total++
+                    true
+                }
+                amount != null && amount > total && userId != null && it.userId == userId ->  {
+                    total++
+                    true
+                }
+                amount == null && characterId != null && it.characterId == characterId -> true
+                amount == null && userId != null && it.userId == userId -> true
+                else -> false
+            }
+        }
+    }
+
     fun addInitiativeItem(dto: InitiativeDto): Int {
         val dice = Wod.randomDice()
         sceneInitiativeQueue.addActions(dto, indexCharacter, dice)
@@ -77,5 +97,10 @@ object InitiativeManager {
         indexCharacter = 1
         sceneInitiativeQueue.clear()
         initiativeQueue.clear()
+    }
+
+    fun removeInitiativeItem(userId: Snowflake? = null, characterId: Int? = null, amount: Int? = null) {
+        sceneInitiativeQueue.remove(userId, characterId, amount)
+        initiativeQueue.remove(userId, characterId, amount)
     }
 }
