@@ -31,7 +31,7 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
                 }
                 else "O comando 'dif' não tem argumentos válidos. -> $arguments"
             }
-            "remove" -> {
+            "init-remove" -> {
                 if (arguments != null && arguments.isNotEmpty()) {
                     val result = snowflakeRegex.matchEntire(arguments[0])
                     InitiativeManager.remove(false,
@@ -49,7 +49,11 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
                 }
                 else "O comando 'remove' não tem argumentos válidos. -> $arguments"
             }
-            "reset" -> {
+            "init-restart" -> {
+                InitiativeManager.restart()
+                "Ok! Fila de iniciativa reinicializada!"
+            }
+            "init-clear" -> {
                 InitiativeManager.clear()
                 "Ok! Fila de iniciativa vazia!"
             }

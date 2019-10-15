@@ -41,7 +41,7 @@ object InitiativeManager {
                 if(item.name != null) {
                     stringBuffer.append(" (${item.name.trim()})")
                 }
-                stringBuffer.append(" #${item.characterId} -> ${item.total}")
+                stringBuffer.append(" &${item.characterId} -> ${item.total}")
                 if (item.penalty != null) {
                     stringBuffer.appendln(" | Penalidade: ${item.penalty}")
                 }
@@ -86,11 +86,13 @@ object InitiativeManager {
 
     fun add(dto: InitiativeDto, userId: Snowflake): Int {
         val dice = Wod.randomDice()
-        sceneInitiativeQueue.addActions(dto, userId, indexCharacter, dice)
+        sceneInitiativeQueue.add(InitiativeItem(userId, indexCharacter, 1, dto.amount,dto.amount + dice, dto.name))
         initiativeQueue.addActions(dto, userId, indexCharacter, dice)
         indexCharacter++
         return dice
     }
+
+    fun getPenalty(userId: Snowflake): Int? = initiativeQueue.first { it.userId == userId }.penalty
 
     fun clear() {
         indexInitiativeQueue = 1
@@ -106,6 +108,7 @@ object InitiativeManager {
     }
 
     fun restart() {
+        indexInitiativeQueue++
         initiativeQueue = PriorityQueue(sceneInitiativeQueue)
     }
 

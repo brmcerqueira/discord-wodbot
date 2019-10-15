@@ -15,11 +15,19 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
             Wod.difficulty = null
         }
 
-        val dicePool = DicePool(dto.amount, difficulty, if (dto.isSpecialization) 10 else 0, dto.isCanceller)
+        var amount = dto.amount
+
+        val penalty = InitiativeManager.getPenalty(userId!!)
+
+        if (penalty != null) {
+            amount += penalty
+        }
+
+        val dicePool = DicePool(amount, difficulty, if (dto.isSpecialization) 10 else 0, dto.isCanceller)
 
         stringBuffer.appendln("```md")
         stringBuffer.append("[ Dados: ")
-        stringBuffer.append(dto.amount)
+        stringBuffer.append(amount)
         stringBuffer.append(" ]( Dificuldade: ")
         stringBuffer.append(difficulty)
         stringBuffer.appendln(" )")
@@ -43,7 +51,7 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
 
         stringBuffer.append("```")
 
-        InitiativeManager.remove(true, userId!!, null, 1)
+        InitiativeManager.remove(true, userId, null, 1)
 
         InitiativeManager.checkRestart()
 

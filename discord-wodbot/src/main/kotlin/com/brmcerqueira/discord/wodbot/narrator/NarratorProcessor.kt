@@ -10,3 +10,4 @@ class NarratorProcessor : ReplyProcessor<Pair<MatchResult, MessageChannel>>(Narr
     override fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?): Pair<MatchResult, MessageChannel>
             = Pair(matchResult, channel)
 }
+
