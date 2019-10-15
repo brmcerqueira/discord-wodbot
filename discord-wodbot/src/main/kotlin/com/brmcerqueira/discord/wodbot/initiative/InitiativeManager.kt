@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.Comparator
 
 object InitiativeManager {
-    private val initiativeComparator = Comparator<InitiativeQueueItem> { left, right ->
+    private val initiativeComparator = Comparator<InitiativeItem> { left, right ->
         when {
             left.index > right.index -> 1
             left.index < right.index -> -1
@@ -52,8 +52,8 @@ object InitiativeManager {
         }
     }
 
-    private fun PriorityQueue<InitiativeQueueItem>.addActions(dto: InitiativeDto, characterId: Int, dice: Int) {
-        val initiativeQueueItem =  InitiativeQueueItem(dto.userId, characterId, 1, dto.amount,dto.amount + dice, dto.name,
+    private fun PriorityQueue<InitiativeItem>.addActions(dto: InitiativeDto, characterId: Int, dice: Int) {
+        val initiativeQueueItem =  InitiativeItem(dto.userId, characterId, 1, dto.amount,dto.amount + dice, dto.name,
             if (!dto.withoutPenalty && dto.actions != null) -dto.actions else null)
         this.add(initiativeQueueItem)
         if (dto.actions != null) {

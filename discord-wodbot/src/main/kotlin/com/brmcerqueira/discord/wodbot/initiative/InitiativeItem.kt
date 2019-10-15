@@ -2,7 +2,7 @@ package com.brmcerqueira.discord.wodbot.initiative
 
 import discord4j.core.`object`.util.Snowflake
 
-data class InitiativeQueueItem(
+data class InitiativeItem(
     val userId: Snowflake,
     val characterId: Int,
     val index: Int,
