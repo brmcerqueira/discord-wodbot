@@ -4,9 +4,11 @@ import com.brmcerqueira.discord.wodbot.BotMessage
 import com.brmcerqueira.discord.wodbot.DicePool
 import com.brmcerqueira.discord.wodbot.Wod
 import com.brmcerqueira.discord.wodbot.format
+import com.brmcerqueira.discord.wodbot.initiative.InitiativeManager
+import discord4j.core.`object`.util.Snowflake
 
 class DicePoolBotMessage : BotMessage<DicePoolDto>() {
-    override fun buildMessage(dto: DicePoolDto, stringBuffer: StringBuffer) {
+    override fun buildMessage(dto: DicePoolDto, userId: Snowflake?, stringBuffer: StringBuffer) {
         val difficulty = Wod.difficulty ?: dto.difficulty
 
         if (Wod.difficulty != null) {
@@ -40,5 +42,11 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
         })
 
         stringBuffer.append("```")
+
+        InitiativeManager.remove(true, userId!!, null, 1)
+
+        InitiativeManager.checkRestart()
+
+        InitiativeManager.printInitiativeQueue(stringBuffer)
     }
 }

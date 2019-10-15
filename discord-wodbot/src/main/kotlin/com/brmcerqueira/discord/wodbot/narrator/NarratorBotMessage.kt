@@ -10,7 +10,7 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
 
     private val snowflakeRegex = "^<@!?(?<id>\\d*)>\$".toRegex()
 
-    override fun buildMessage(dto: Pair<MatchResult, MessageChannel>, stringBuffer: StringBuffer) {
+    override fun buildMessage(dto: Pair<MatchResult, MessageChannel>, userId: Snowflake?, stringBuffer: StringBuffer) {
         stringBuffer.appendln("```fix")
 
         val command = dto.first.groups["command"]?.value
@@ -34,9 +34,8 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
             "remove" -> {
                 if (arguments != null && arguments.isNotEmpty()) {
                     val result = snowflakeRegex.matchEntire(arguments[0])
-
-                    InitiativeManager.removeInitiativeItem(userId =
-                        if (result != null && result.groups["id"] != null)
+                    InitiativeManager.remove(false,
+                        userId =  if (result != null && result.groups["id"] != null)
                             Snowflake.of(result.groups["id"]!!.value)
                         else null,
                         characterId = arguments[0].toIntOrNull(),
@@ -51,7 +50,7 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
                 else "O comando 'remove' não tem argumentos válidos. -> $arguments"
             }
             "reset" -> {
-                InitiativeManager.clearInitiativeQueue()
+                InitiativeManager.clear()
                 "Ok! Fila de iniciativa vazia!"
             }
             "here" -> {

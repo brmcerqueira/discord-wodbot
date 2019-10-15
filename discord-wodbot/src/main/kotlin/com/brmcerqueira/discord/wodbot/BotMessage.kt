@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono
 
 abstract class BotMessage<T> {
 
-    protected abstract fun buildMessage(dto: T, stringBuffer: StringBuffer)
+    protected abstract fun buildMessage(dto: T, userId: Snowflake?, stringBuffer: StringBuffer)
 
     fun send(channel: MessageChannel, dto: T, userId: Snowflake?, description: String?): Mono<Unit> {
         val stringBuffer = StringBuffer()
@@ -20,7 +20,7 @@ abstract class BotMessage<T> {
             stringBuffer.appendln()
         }
 
-        buildMessage(dto, stringBuffer)
+        buildMessage(dto, userId, stringBuffer)
 
         return channel.createMessage(stringBuffer.toString()).map { Unit }
     }

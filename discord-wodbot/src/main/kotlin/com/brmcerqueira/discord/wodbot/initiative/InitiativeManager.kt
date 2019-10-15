@@ -53,8 +53,8 @@ object InitiativeManager {
         }
     }
 
-    private fun PriorityQueue<InitiativeItem>.addActions(dto: InitiativeDto, characterId: Int, dice: Int) {
-        val initiativeQueueItem =  InitiativeItem(dto.userId, characterId, 1, dto.amount,dto.amount + dice, dto.name,
+    private fun PriorityQueue<InitiativeItem>.addActions(dto: InitiativeDto, userId: Snowflake, characterId: Int, dice: Int) {
+        val initiativeQueueItem =  InitiativeItem(userId, characterId, 1, dto.amount,dto.amount + dice, dto.name,
             if (!dto.withoutPenalty && dto.actions != null) -dto.actions else null)
         this.add(initiativeQueueItem)
         if (dto.actions != null) {
@@ -84,23 +84,35 @@ object InitiativeManager {
         }
     }
 
-    fun addInitiativeItem(dto: InitiativeDto): Int {
+    fun add(dto: InitiativeDto, userId: Snowflake): Int {
         val dice = Wod.randomDice()
-        sceneInitiativeQueue.addActions(dto, indexCharacter, dice)
-        initiativeQueue.addActions(dto, indexCharacter, dice)
+        sceneInitiativeQueue.addActions(dto, userId, indexCharacter, dice)
+        initiativeQueue.addActions(dto, userId, indexCharacter, dice)
         indexCharacter++
         return dice
     }
 
-    fun clearInitiativeQueue() {
+    fun clear() {
         indexInitiativeQueue = 1
         indexCharacter = 1
         sceneInitiativeQueue.clear()
         initiativeQueue.clear()
     }
 
-    fun removeInitiativeItem(userId: Snowflake? = null, characterId: Int? = null, amount: Int? = null) {
-        sceneInitiativeQueue.remove(userId, characterId, amount)
+    fun checkRestart() {
+        if (initiativeQueue.isEmpty()) {
+            restart()
+        }
+    }
+
+    fun restart() {
+        initiativeQueue = PriorityQueue(sceneInitiativeQueue)
+    }
+
+    fun remove(onlyCurrent: Boolean, userId: Snowflake? = null, characterId: Int? = null, amount: Int? = null) {
+        if (!onlyCurrent) {
+            sceneInitiativeQueue.remove(userId, characterId, amount)
+        }
         initiativeQueue.remove(userId, characterId, amount)
     }
 }

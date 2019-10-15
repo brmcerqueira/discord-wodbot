@@ -91,9 +91,8 @@ fun main(args: Array<String>) {
             get("/keep/alive") {
                 call.respond(HttpStatusCode.OK, Unit)
             }
-            post("/wod/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { dto, _ -> DicePoolDto(dto.amount, dto.difficulty, dto.isCanceller, dto.isSpecialization) })
-            post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { dto, _ -> DicePoolDto(dto.amount, dto.difficulty, dto.isCanceller, dto.isSpecialization) })
-            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) { dto, authorization -> InitiativeDto(authorization, dto.amount, dto.withoutPenalty, dto.actions) })
+            post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { DicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
+            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) {  InitiativeDto(it.amount, it.withoutPenalty, it.actions) })
         }
     }
 
@@ -101,7 +100,7 @@ fun main(args: Array<String>) {
 }
 
 @KtorExperimentalAPI
-private inline fun <reified TDto : IDescription, reified T : Any> treatRequest(botMessage: BotMessage<T>, crossinline action: (TDto, Snowflake) -> T):
+private inline fun <reified TDto : IDescription, reified T : Any> treatRequest(botMessage: BotMessage<T>, crossinline action: (TDto) -> T):
         suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
         val authorization = if (call.request.authorization() != null)
@@ -109,7 +108,7 @@ private inline fun <reified TDto : IDescription, reified T : Any> treatRequest(b
 
         if (authorization != null && Wod.messageChannel != null) {
             val dto: TDto = call.receive()
-            botMessage.send(Wod.messageChannel!!, action(dto, authorization), authorization, dto.description).subscribe()
+            botMessage.send(Wod.messageChannel!!, action(dto), authorization, dto.description).subscribe()
             call.respond(HttpStatusCode.OK)
         }
 
