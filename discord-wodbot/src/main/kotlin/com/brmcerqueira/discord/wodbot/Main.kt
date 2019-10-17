@@ -6,6 +6,7 @@ import com.brmcerqueira.discord.wodbot.dicepool.DicePoolDto
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolModel
 import com.brmcerqueira.discord.wodbot.dicepool.DicePoolProcessor
 import com.brmcerqueira.discord.wodbot.initiative.*
+import com.brmcerqueira.discord.wodbot.multipleactions.MultipleActionsProcessor
 import com.fasterxml.jackson.databind.SerializationFeature
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.lifecycle.ReadyEvent
@@ -41,6 +42,7 @@ fun main(args: Array<String>) {
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
                     DicePoolProcessor(),
+                    MultipleActionsProcessor(),
                     NarratorProcessor())
             .subscribe()
 
