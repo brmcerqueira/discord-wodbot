@@ -1,7 +1,7 @@
 package com.brmcerqueira.discord.wodbot.initiative
 
+import com.brmcerqueira.discord.wodbot.PenaltyMode
 import com.brmcerqueira.discord.wodbot.Wod
-import com.brmcerqueira.discord.wodbot.initiative.InitiativeManager.addActions
 import com.brmcerqueira.discord.wodbot.multipleactions.MultipleActionsDto
 import discord4j.core.`object`.util.Snowflake
 import java.util.*
@@ -39,11 +39,11 @@ object InitiativeManager {
             while (queue.peek() != null)
             {
                 val item = queue.poll()
-                stringBuffer.append("$index. <@${item.userId.asString()}>")
+                stringBuffer.append("$index. <@${item.userId.asString()}> &${item.characterId}")
                 if(item.name != null) {
                     stringBuffer.append(" (${item.name.trim()})")
                 }
-                stringBuffer.append(" &${item.characterId} -> ${item.total}")
+                stringBuffer.append(" -> ${item.total}")
                 if (item.penalty != null) {
                     stringBuffer.appendln(" | Penalidade: ${item.penalty}")
                 }
@@ -55,21 +55,19 @@ object InitiativeManager {
         }
     }
 
-    private fun PriorityQueue<InitiativeItem>.addExtraActions(initiativeItem: InitiativeItem, actions: Int, withoutPenalty: Boolean) {
+    private fun PriorityQueue<InitiativeItem>.addExtraActions(initiativeItem: InitiativeItem, actions: Int, penaltyMode: PenaltyMode) {
+        if (penaltyMode == PenaltyMode.Offensive) {
+            initiativeItem.penalty = -(actions + 1)
+        }
+
         for (index in 2..actions + 1) {
             this.add(initiativeItem.copy(
                 index = index,
-                penalty = if (withoutPenalty) null
-                else -(actions + index - 1)))
-        }
-    }
-
-    private fun PriorityQueue<InitiativeItem>.addActions(dto: InitiativeDto, userId: Snowflake, characterId: Int, dice: Int) {
-        val initiativeQueueItem =  InitiativeItem(userId, characterId, 1, dto.amount,dto.amount + dice, dto.name,
-            if (!dto.withoutPenalty && dto.actions != null) -dto.actions else null)
-        this.add(initiativeQueueItem)
-        if (dto.actions != null) {
-            this.addExtraActions(initiativeQueueItem, dto.actions, dto.withoutPenalty)
+                penalty = when(penaltyMode) {
+                    PenaltyMode.Defensive -> -(index - 1)
+                    PenaltyMode.Offensive -> -(index + actions)
+                    else -> null
+                }))
         }
     }
 
@@ -92,15 +90,29 @@ object InitiativeManager {
             userId == it.userId && it.index > 1 && (dto.characterId == null || dto.characterId == it.characterId)
         }
 
-        initiativeQueue.addExtraActions(initiativeQueue.first {
+        val initiativeItem = initiativeQueue.firstOrNull {
             it.userId == userId && (dto.characterId == null || dto.characterId == it.characterId)
-        }, dto.actions, dto.withoutPenalty)
+        }
+
+        if (initiativeItem != null) {
+            if (dto.actions > 0) {
+                initiativeQueue.addExtraActions(initiativeItem, dto.actions, dto.penaltyMode)
+            }
+            else {
+                initiativeItem.penalty = null
+            }
+        }
     }
 
     fun add(dto: InitiativeDto, userId: Snowflake): Int {
         val dice = Wod.randomDice()
-        sceneInitiativeQueue.add(InitiativeItem(userId, indexCharacter, 1, dto.amount,dto.amount + dice, dto.name))
-        initiativeQueue.addActions(dto, userId, indexCharacter, dice)
+        val sceneInitiativeItem = InitiativeItem(userId, indexCharacter, 1, dto.amount,dto.amount + dice, dto.name)
+        sceneInitiativeQueue.add(sceneInitiativeItem)
+        val initiativeItem =  sceneInitiativeItem.copy()
+        initiativeQueue.add(initiativeItem)
+        if (dto.actions != null) {
+            initiativeQueue.addExtraActions(initiativeItem, dto.actions, dto.penaltyMode)
+        }
         indexCharacter++
         return dice
     }

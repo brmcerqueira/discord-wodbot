@@ -94,7 +94,7 @@ fun main(args: Array<String>) {
                 call.respond(HttpStatusCode.OK, Unit)
             }
             post("/roll/dices", treatRequest<DicePoolModel, DicePoolDto>(DicePoolBotMessage()) { DicePoolDto(it.amount, it.difficulty, it.isCanceller, it.isSpecialization) })
-            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) {  InitiativeDto(it.amount, it.withoutPenalty, it.actions) })
+            post("/roll/initiative", treatRequest<InitiativeModel, InitiativeDto>(InitiativeBotMessage()) {  InitiativeDto(it.amount, it.penaltyMode, it.actions) })
         }
     }
 

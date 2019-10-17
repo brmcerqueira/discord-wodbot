@@ -9,6 +9,14 @@ class InitiativeBotMessage : BotMessage<InitiativeDto>() {
 
         stringBuffer.appendln("```md")
 
+        if (dto.actions != null) {
+            stringBuffer.append("[ Ações: ")
+            stringBuffer.append(dto.actions + 1)
+            stringBuffer.append(" ]( Modo de Penalidade: ")
+            stringBuffer.append(dto.penaltyMode)
+            stringBuffer.appendln(" )")
+        }
+
         stringBuffer.appendln("< ${dto.amount} + $dice = ${dto.amount + dice} >")
 
         stringBuffer.append("```")

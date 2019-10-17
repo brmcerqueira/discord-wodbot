@@ -1,4 +1,6 @@
 package com.brmcerqueira.discord.wodbot.initiative
 
-data class InitiativeDto(val amount: Int, val withoutPenalty: Boolean, val actions: Int? = null, val name: String? = null)
+import com.brmcerqueira.discord.wodbot.PenaltyMode
+
+data class InitiativeDto(val amount: Int, val penaltyMode: PenaltyMode, val actions: Int? = null, val name: String? = null)
 

@@ -10,20 +10,13 @@ class MultipleActionsBotMessage : BotMessage<MultipleActionsDto>() {
 
         stringBuffer.appendln("```md")
         stringBuffer.append("[ Ações: ")
-        stringBuffer.append(dto.actions)
-        stringBuffer.append(" ]")
+        stringBuffer.append(dto.actions + 1)
+        stringBuffer.append(" ]( Modo de Penalidade: ")
+        stringBuffer.append(dto.penaltyMode)
+        stringBuffer.appendln(" )")
 
         if (dto.characterId != null) {
-            stringBuffer.append("( Personagem: ")
-            stringBuffer.append(dto.characterId)
-            stringBuffer.appendln(" )")
-        }
-        else {
-            stringBuffer.appendln()
-        }
-
-        if (dto.withoutPenalty) {
-            stringBuffer.appendln("> As penalidades não foram aplicadas.")
+            stringBuffer.appendln("< Personagem = ${dto.characterId} >")
         }
 
         stringBuffer.append("```")

@@ -9,5 +9,5 @@ data class InitiativeItem(
     val initiative: Int,
     val total: Int,
     val name: String? = null,
-    val penalty: Int? = null
+    var penalty: Int? = null
 )

@@ -21,41 +21,44 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
 
         stringBuffer.appendln(when(command) {
             "dif" -> {
-                if (arguments != null && arguments.isNotEmpty() && arguments[0].toIntOrNull() != null) {
-                    val value = arguments[0].toInt()
-                    if (value in 3..9) {
+                when(val value = arguments.getArg(0)?.toIntOrNull()) {
+                    in 3..9 -> {
                         Wod.difficulty = value
                         "O narrador ajustou a dificuldade para ${Wod.difficulty}."
                     }
-                    else "A dificuldade deve ser maior igual a '3' e menor igual a '9'. -> $value"
+                    !in 3..9 -> "A dificuldade deve ser maior igual a '3' e menor igual a '9'. -> $value"
+                    else -> "O comando 'dif' não tem argumentos válidos. -> $arguments"
                 }
-                else "O comando 'dif' não tem argumentos válidos. -> $arguments"
             }
-            "init-remove" -> {
-                if (arguments != null && arguments.isNotEmpty()) {
-                    val result = snowflakeRegex.matchEntire(arguments[0])
-                    InitiativeManager.remove(false,
-                        userId =  if (result != null && result.groups["id"] != null)
-                            Snowflake.of(result.groups["id"]!!.value)
-                        else null,
-                        characterId = arguments[0].toIntOrNull(),
-                        amount = if (arguments.count() == 2) when(arguments[1].toIntOrNull()) {
-                            0 -> null
-                            in 1..99 -> arguments[1].toIntOrNull()
-                            else -> 1
-                        } else 1)
-                    mustPrintInitiativeQueue = true
-                    "O narrador removeu o item."
+            "init" -> {
+                when(arguments.getArg(0)) {
+                    "remove" -> {
+                        val id = arguments.getArg(1)
+                        val result = id?.let { snowflakeRegex.matchEntire(it) }
+                        InitiativeManager.remove(false,
+                                userId =  if (result != null && result.groups["id"] != null)
+                                    Snowflake.of(result.groups["id"]!!.value)
+                                else null,
+                                characterId = id?.toIntOrNull(),
+                                amount =  when(arguments.getArg(2)?.toIntOrNull()) {
+                                    0 -> null
+                                    in 1..99 -> arguments.getArg(2)?.toIntOrNull()
+                                    else -> 1
+                                })
+                        mustPrintInitiativeQueue = true
+                        "O narrador removeu o item."
+                    }
+                    "restart" -> {
+                        InitiativeManager.restart()
+                        mustPrintInitiativeQueue = true
+                        "Ok! Fila de iniciativa reinicializada!"
+                    }
+                    "clear" -> {
+                        InitiativeManager.clear()
+                        "Ok! Fila de iniciativa vazia!"
+                    }
+                    else -> "O comando 'init' não tem argumentos válidos. -> $arguments"
                 }
-                else "O comando 'remove' não tem argumentos válidos. -> $arguments"
-            }
-            "init-restart" -> {
-                InitiativeManager.restart()
-                "Ok! Fila de iniciativa reinicializada!"
-            }
-            "init-clear" -> {
-                InitiativeManager.clear()
-                "Ok! Fila de iniciativa vazia!"
             }
             "here" -> {
                 Wod.messageChannel = dto.second
@@ -70,4 +73,9 @@ class NarratorBotMessage : BotMessage<Pair<MatchResult, MessageChannel>>() {
             InitiativeManager.printInitiativeQueue(stringBuffer)
         }
     }
+
+    private fun List<String>?.getArg(index: Int): String? =
+        if (this != null && this.count() > index)
+            this[index]
+        else null
 }
