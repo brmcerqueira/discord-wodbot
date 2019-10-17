@@ -5,7 +5,7 @@ import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.util.Snowflake
 
 class DicePoolProcessor : ReplyProcessor<DicePoolDto>(DicePoolBotMessage()) {
-    override fun getRegex(): Regex = "^%(?<isSpecialization>\\?)?(?<isCanceller>!)?(?<dices>[1-9]?\\d)\\s*(\\*(?<difficulty>[1-9]?\\d))?(?<description>.*)\$".toRegex()
+    override fun getRegex(): Regex = "^%(?<isSpecialization>\\?)?(?<isCanceller>!)?(?<dices>[1-9]?\\d)\\s*(\\*(?<difficulty>[1-9]?\\d))?\\s*(?<description>.*)\$".toRegex()
 
     override fun extractDto(matchResult: MatchResult, channel: MessageChannel, userId: Snowflake?): DicePoolDto {
         return DicePoolDto(matchResult.groups["dices"]!!.value.toInt(),
