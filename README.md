@@ -12,8 +12,14 @@
 
 ``docker tag discord-wodbot registry.heroku.com/discord-wodbot/latest``
 
+``heroku login``
+
+``heroku container:login``
+
 ``docker push registry.heroku.com/discord-wodbot/latest``
 
-``heroku container:push web --arg PROJECT_TOKEN=<VALUE>``
+``heroku container:push web --arg PROJECT_TOKEN=<VALUE> --app discord-wodbot``
+
+``heroku container:release web --app discord-wodbot``
 
 ``\@<Username>#Discriminator``
