@@ -117,7 +117,7 @@ object InitiativeManager {
         return dice
     }
 
-    fun getPenalty(userId: Snowflake): Int? = initiativeQueue.first { it.userId == userId }.penalty
+    fun getPenalty(userId: Snowflake): Int? = initiativeQueue.firstOrNull { it.userId == userId }?.penalty
 
     fun clear() {
         indexInitiativeQueue = 1
