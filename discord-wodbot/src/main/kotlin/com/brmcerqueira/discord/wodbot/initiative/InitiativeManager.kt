@@ -1,6 +1,8 @@
 package com.brmcerqueira.discord.wodbot.initiative
 
 import com.brmcerqueira.discord.wodbot.Wod
+import com.brmcerqueira.discord.wodbot.initiative.InitiativeManager.addActions
+import com.brmcerqueira.discord.wodbot.multipleactions.MultipleActionsDto
 import discord4j.core.`object`.util.Snowflake
 import java.util.*
 import kotlin.Comparator
@@ -53,15 +55,21 @@ object InitiativeManager {
         }
     }
 
+    private fun PriorityQueue<InitiativeItem>.addExtraActions(initiativeItem: InitiativeItem, actions: Int, withoutPenalty: Boolean) {
+        for (index in 2..actions + 1) {
+            this.add(initiativeItem.copy(
+                index = index,
+                penalty = if (withoutPenalty) null
+                else -(actions + index - 1)))
+        }
+    }
+
     private fun PriorityQueue<InitiativeItem>.addActions(dto: InitiativeDto, userId: Snowflake, characterId: Int, dice: Int) {
         val initiativeQueueItem =  InitiativeItem(userId, characterId, 1, dto.amount,dto.amount + dice, dto.name,
             if (!dto.withoutPenalty && dto.actions != null) -dto.actions else null)
         this.add(initiativeQueueItem)
         if (dto.actions != null) {
-            for (index in 2..dto.actions + 1) {
-                this.add(initiativeQueueItem.copy(index = index,
-                        penalty = if (dto.withoutPenalty) null else -(dto.actions + index - 1)))
-            }
+            this.addExtraActions(initiativeQueueItem, dto.actions, dto.withoutPenalty)
         }
     }
 
@@ -69,19 +77,24 @@ object InitiativeManager {
         var total = 0
         this.removeIf {
             when {
-                amount != null && amount > total && characterId != null && it.characterId == characterId -> {
+                amount != null && amount > total && ((userId != null && userId == it.userId) || (characterId != null && characterId == it.characterId)) -> {
                     total++
                     true
                 }
-                amount != null && amount > total && userId != null && it.userId == userId ->  {
-                    total++
-                    true
-                }
-                amount == null && characterId != null && it.characterId == characterId -> true
-                amount == null && userId != null && it.userId == userId -> true
+                amount == null && ((userId != null && userId == it.userId) || (characterId != null && characterId == it.characterId)) -> true
                 else -> false
             }
         }
+    }
+
+    fun adjustMultipleActions(dto: MultipleActionsDto, userId: Snowflake) {
+        initiativeQueue.removeIf {
+            userId == it.userId && it.index > 1 && (dto.characterId == null || dto.characterId == it.characterId)
+        }
+
+        initiativeQueue.addExtraActions(initiativeQueue.first {
+            it.userId == userId && (dto.characterId == null || dto.characterId == it.characterId)
+        }, dto.actions, dto.withoutPenalty)
     }
 
     fun add(dto: InitiativeDto, userId: Snowflake): Int {

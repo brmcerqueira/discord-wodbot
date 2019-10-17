@@ -64,7 +64,7 @@ fun main(args: Array<String>) {
                     <!DOCTYPE html>
                     <html>
                     <body>
-                    <h1>Codbot</h1>
+                    <h1>Wodbot</h1>
                     <p>Último status:</p>
                     <p id="lastStatus"></p>
                     <script>
