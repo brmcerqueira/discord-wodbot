@@ -33,9 +33,7 @@ object InitiativeManager {
 
     fun printInitiativeQueue(stringBuffer: StringBuffer) {
         if (initiativeQueue.isNotEmpty()) {
-            stringBuffer.appendln("```xml")
-            stringBuffer.appendln("< Fila = $indexInitiativeQueue >")
-            stringBuffer.appendln("```")
+            stringBuffer.appendln("__**Fila de iniciativa**__***: $indexInitiativeQueue***")
 
             val queue = PriorityQueue(initiativeQueue)
             val layoutTable = LayoutTable(10)
