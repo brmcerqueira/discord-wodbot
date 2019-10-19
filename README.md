@@ -1,6 +1,6 @@
 # discord-wodbot
 
-``gradle run --args="<VALUE>"``
+``gradle run``
 
 ``docker build --no-cache -t discord-wodbot:latest .``
 
