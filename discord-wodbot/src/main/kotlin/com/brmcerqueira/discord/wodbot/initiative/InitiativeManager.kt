@@ -43,13 +43,19 @@ object InitiativeManager {
                 val item = queue.poll()
                 stringBuffer.append("**$index.** <@${item.userId.asString()}>")
                 if(item.name != null) {
-                    stringBuffer.append(" **(${item.name.trim()})**")
+                    stringBuffer.append(" **(${item.name.trim()})**         ")
                 }
-                stringBuffer.append(" __**Id**__: ${item.characterId}")
+                else  {
+                    stringBuffer.append("                                   ")
+                }
+                stringBuffer.append("           __**Id**__: ${item.characterId}         ")
                 if (item.penalty != null) {
-                    stringBuffer.append(" **|** __**Penalidade**__: ${item.penalty}")
+                    stringBuffer.append(" __**Penalidade**__: ${item.penalty}           ")
                 }
-                stringBuffer.appendln(" **->** ***${item.total}***")
+                else {
+                    stringBuffer.append("                                               ")
+                }
+                stringBuffer.appendln("          __**Total**__: ***${item.total}***")
                 index++
             }
         }
