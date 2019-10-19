@@ -2,7 +2,7 @@
 
 ``gradle run --args="<VALUE>"``
 
-``docker build --no-cache -t discord-wodbot:latest --build-arg PROJECT_TOKEN=<VALUE> .``
+``docker build --no-cache -t discord-wodbot:latest .``
 
 ``docker run --name discord-wodbot -it -d -p 8085:8080 discord-codbot``
 
@@ -18,7 +18,7 @@
 
 ``docker push registry.heroku.com/discord-wodbot/latest``
 
-``heroku container:push web --arg PROJECT_TOKEN=<VALUE> --app discord-wodbot``
+``heroku container:push web --app discord-wodbot``
 
 ``heroku container:release web --app discord-wodbot``
 

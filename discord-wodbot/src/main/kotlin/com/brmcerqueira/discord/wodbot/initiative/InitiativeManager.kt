@@ -1,5 +1,6 @@
 package com.brmcerqueira.discord.wodbot.initiative
 
+import com.brmcerqueira.discord.wodbot.LayoutTable
 import com.brmcerqueira.discord.wodbot.PenaltyMode
 import com.brmcerqueira.discord.wodbot.Wod
 import com.brmcerqueira.discord.wodbot.multipleactions.MultipleActionsDto
@@ -36,28 +37,23 @@ object InitiativeManager {
             stringBuffer.append("```")
 
             val queue = PriorityQueue(initiativeQueue)
+            val layoutTable = LayoutTable(10)
 
             var index = 1
             while (queue.peek() != null)
             {
                 val item = queue.poll()
-                stringBuffer.append("**$index.** <@${item.userId.asString()}>")
-                if(item.name != null) {
-                    stringBuffer.append(" **(${item.name.trim()})**         ")
-                }
-                else  {
-                    stringBuffer.append("                                   ")
-                }
-                stringBuffer.append("           __**Id**__: ${item.characterId}         ")
-                if (item.penalty != null) {
-                    stringBuffer.append(" __**Penalidade**__: ${item.penalty}           ")
-                }
-                else {
-                    stringBuffer.append("                                               ")
-                }
-                stringBuffer.appendln("          __**Total**__: ***${item.total}***")
+                layoutTable.row("**$index.**",
+                    "<@${item.userId.asString()}>",
+                    if(item.name != null) "**(${item.name.trim()})**" else "   -   ",
+                    "__**Id**__: ${item.characterId}",
+                    if (item.penalty != null) "__**Penalidade**__: ${item.penalty}" else "    -     ",
+                    "__**Total**__: ***${item.total}***"
+                )
                 index++
             }
+
+            layoutTable.print(stringBuffer)
         }
     }
 
