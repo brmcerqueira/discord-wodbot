@@ -31,7 +31,11 @@ object InitiativeManager {
 
     fun printInitiativeQueue(stringBuffer: StringBuffer) {
         if (initiativeQueue.isNotEmpty()) {
-            stringBuffer.appendln("__***Resumo***__ -> $indexInitiativeQueue")
+            stringBuffer.appendln()
+
+            stringBuffer.appendln("```ini")
+            stringBuffer.appendln("[ Fila -> $indexInitiativeQueue ]")
+            stringBuffer.appendln("```")
 
             val queue = PriorityQueue(initiativeQueue)
 
@@ -39,13 +43,13 @@ object InitiativeManager {
             while (queue.peek() != null)
             {
                 val item = queue.poll()
-                stringBuffer.append("$index. <@${item.userId.asString()}> &${item.characterId}")
+                stringBuffer.append("**$index.** <@${item.userId.asString()}> __**Id**__: ${item.characterId}")
                 if(item.name != null) {
-                    stringBuffer.append(" (${item.name.trim()})")
+                    stringBuffer.append(" **(${item.name.trim()})**")
                 }
-                stringBuffer.append(" -> ${item.total}")
+                stringBuffer.append(" -> ***${item.total}***")
                 if (item.penalty != null) {
-                    stringBuffer.appendln(" | Penalidade: ${item.penalty}")
+                    stringBuffer.appendln(" | __**Penalidade**__: ${item.penalty}")
                 }
                 else {
                     stringBuffer.appendln()
@@ -91,7 +95,7 @@ object InitiativeManager {
         }
 
         val initiativeItem = initiativeQueue.firstOrNull {
-            it.userId == userId && (dto.characterId == null || dto.characterId == it.characterId)
+            userId == it.userId && (dto.characterId == null || dto.characterId == it.characterId)
         }
 
         if (initiativeItem != null) {
@@ -106,6 +110,16 @@ object InitiativeManager {
 
     fun add(dto: InitiativeDto, userId: Snowflake): Int {
         val dice = Wod.randomDice()
+
+        if (Wod.narratorId != userId) {
+            sceneInitiativeQueue.removeIf {
+                userId == it.userId
+            }
+            initiativeQueue.removeIf {
+                userId == it.userId
+            }
+        }
+
         val sceneInitiativeItem = InitiativeItem(userId, indexCharacter, 1, dto.amount,dto.amount + dice, dto.name)
         sceneInitiativeQueue.add(sceneInitiativeItem)
         val initiativeItem =  sceneInitiativeItem.copy()

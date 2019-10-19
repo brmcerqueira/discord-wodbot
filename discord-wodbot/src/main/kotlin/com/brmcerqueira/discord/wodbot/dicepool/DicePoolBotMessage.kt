@@ -6,6 +6,7 @@ import com.brmcerqueira.discord.wodbot.Wod
 import com.brmcerqueira.discord.wodbot.format
 import com.brmcerqueira.discord.wodbot.initiative.InitiativeManager
 import discord4j.core.`object`.util.Snowflake
+import kotlin.math.absoluteValue
 
 class DicePoolBotMessage : BotMessage<DicePoolDto>() {
     override fun buildMessage(dto: DicePoolDto, userId: Snowflake?, stringBuffer: StringBuffer) {
@@ -27,6 +28,14 @@ class DicePoolBotMessage : BotMessage<DicePoolDto>() {
 
         stringBuffer.appendln("```md")
         stringBuffer.append("[ Dados: ")
+
+        if (penalty != null) {
+            stringBuffer.append(dto.amount)
+            stringBuffer.append(" - ")
+            stringBuffer.append(penalty.absoluteValue)
+            stringBuffer.append(" = ")
+        }
+
         stringBuffer.append(amount)
         stringBuffer.append(" ]( Dificuldade: ")
         stringBuffer.append(difficulty)

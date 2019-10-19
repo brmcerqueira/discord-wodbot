@@ -36,8 +36,8 @@ import io.ktor.util.pipeline.PipelineContext
 import kotlin.collections.ArrayList
 
 @KtorExperimentalAPI
-fun main(args: Array<String>) {
-    val client = DiscordClientBuilder(args.first()).build()
+fun main() {
+    val client = DiscordClientBuilder(System.getenv("BOT_TOKEN")).build()
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
             .register(InitiativeProcessor(),
