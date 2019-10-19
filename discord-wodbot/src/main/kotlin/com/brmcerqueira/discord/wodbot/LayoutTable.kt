@@ -1,7 +1,7 @@
 package com.brmcerqueira.discord.wodbot
 
 class LayoutTable(private val margin: Int) {
-    private val rows = mutableListOf<List<String>>()
+    private val rows = mutableListOf<List<Any?>>()
 
     private fun center(value: String, size: Int): String {
         val pad = ' '
@@ -20,7 +20,7 @@ class LayoutTable(private val margin: Int) {
     }
 
 
-    fun row(vararg values: String) {
+    fun row(vararg values: Any?) {
         rows.add(values.toList())
     }
 
@@ -30,20 +30,48 @@ class LayoutTable(private val margin: Int) {
         rows.forEach { row ->
             row.forEachIndexed { index, value ->
                 val length = map.getOrPut(index) {
-                    value.length
+                    value?.toString()?.length ?: 0
                 }
 
-                if (length < value.length) {
-                    map[index] = value.length
+                if (value != null && length < value.toString().length) {
+                    map[index] = value.toString().length
                 }
             }
         }
 
         rows.forEach { row ->
+            var isOpen = false
+            stringBuffer.append("> ")
             row.forEachIndexed { index, value ->
-                stringBuffer.append(center(value, map[index]!!  + margin))
+                val size = map[index]!!
+                val text = center(value?.toString() ?: "".padEnd(size), size + margin)
+
+                when(value) {
+                    is LayoutTableEscape -> {
+                        if (isOpen) {
+                            stringBuffer.append("`")
+                            isOpen = false
+                        }
+                        stringBuffer.append(text)
+                    }
+                    else -> {
+                        if (!isOpen) {
+                            stringBuffer.append("`")
+                            isOpen = true
+                        }
+
+                        stringBuffer.append(text)
+                    }
+                }
             }
-            stringBuffer.appendln()
+
+            if (isOpen) {
+                stringBuffer.appendln("`")
+            }
+            else {
+                stringBuffer.appendln()
+            }
         }
     }
 }
+

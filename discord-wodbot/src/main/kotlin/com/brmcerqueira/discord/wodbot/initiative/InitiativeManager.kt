@@ -4,6 +4,7 @@ import com.brmcerqueira.discord.wodbot.LayoutTable
 import com.brmcerqueira.discord.wodbot.PenaltyMode
 import com.brmcerqueira.discord.wodbot.Wod
 import com.brmcerqueira.discord.wodbot.multipleactions.MultipleActionsDto
+import com.brmcerqueira.discord.wodbot.not
 import discord4j.core.`object`.util.Snowflake
 import java.util.*
 import kotlin.Comparator
@@ -34,7 +35,7 @@ object InitiativeManager {
         if (initiativeQueue.isNotEmpty()) {
             stringBuffer.appendln("```xml")
             stringBuffer.appendln("< Fila = $indexInitiativeQueue >")
-            stringBuffer.append("```")
+            stringBuffer.appendln("```")
 
             val queue = PriorityQueue(initiativeQueue)
             val layoutTable = LayoutTable(10)
@@ -43,12 +44,12 @@ object InitiativeManager {
             while (queue.peek() != null)
             {
                 val item = queue.poll()
-                layoutTable.row("**$index.**",
-                    "<@${item.userId.asString()}>",
-                    if(item.name != null) "**(${item.name.trim()})**" else "   -   ",
-                    "__**Id**__: ${item.characterId}",
-                    if (item.penalty != null) "__**Penalidade**__: ${item.penalty}" else "    -     ",
-                    "__**Total**__: ***${item.total}***"
+                layoutTable.row("$index.",
+                    item.name,
+                    "Id: ${item.characterId}",
+                    if (item.penalty != null) "Penalidade: ${item.penalty}" else null,
+                    "Total: ${item.total}",
+                    !"<@${item.userId.asString()}>"
                 )
                 index++
             }

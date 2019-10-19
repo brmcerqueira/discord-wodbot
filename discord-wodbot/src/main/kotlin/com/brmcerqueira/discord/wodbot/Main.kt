@@ -138,3 +138,5 @@ fun MatchResult.getDescription(): String? {
         null
     }
 }
+
+operator fun String.not()= LayoutTableEscape(this)
