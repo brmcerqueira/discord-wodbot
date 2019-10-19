@@ -31,11 +31,9 @@ object InitiativeManager {
 
     fun printInitiativeQueue(stringBuffer: StringBuffer) {
         if (initiativeQueue.isNotEmpty()) {
-            stringBuffer.appendln()
-
-            stringBuffer.appendln("```ini")
-            stringBuffer.appendln("[ Fila -> $indexInitiativeQueue ]")
-            stringBuffer.appendln("```")
+            stringBuffer.appendln("```xml")
+            stringBuffer.appendln("< Fila = $indexInitiativeQueue >")
+            stringBuffer.append("```")
 
             val queue = PriorityQueue(initiativeQueue)
 
@@ -43,17 +41,15 @@ object InitiativeManager {
             while (queue.peek() != null)
             {
                 val item = queue.poll()
-                stringBuffer.append("**$index.** <@${item.userId.asString()}> __**Id**__: ${item.characterId}")
+                stringBuffer.append("**$index.** <@${item.userId.asString()}>")
                 if(item.name != null) {
                     stringBuffer.append(" **(${item.name.trim()})**")
                 }
-                stringBuffer.append(" -> ***${item.total}***")
+                stringBuffer.append(" __**Id**__: ${item.characterId}")
                 if (item.penalty != null) {
-                    stringBuffer.appendln(" | __**Penalidade**__: ${item.penalty}")
+                    stringBuffer.append(" **|** __**Penalidade**__: ${item.penalty}")
                 }
-                else {
-                    stringBuffer.appendln()
-                }
+                stringBuffer.appendln(" **->** ***${item.total}***")
                 index++
             }
         }
